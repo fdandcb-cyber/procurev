@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wholesale Price Discovery | Master-Distributor Rates</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0f1a;
+            --card-bg: rgba(25, 30, 45, 0.6);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent-blue: #00d4ff;
+            --accent-purple: #7c3aed;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        /* Particle Background */
+        #particles-js {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: radial-gradient(circle at center, #131b2f 0%, #0a0f1a 100%);
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) translateX(50px); opacity: 0; }
+        }
+
+        /* Flashing Banner */
+        .flashing-banner {
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 12px 20px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+            animation: pulseBanner 2s infinite;
+            cursor: pointer;
+        }
+
+        @keyframes pulseBanner {
+            0% { box-shadow: 0 0 10px rgba(0, 212, 255, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(124, 58, 237, 0.8); }
+            100% { box-shadow: 0 0 10px rgba(0, 212, 255, 0.4); }
+        }
+
+        .banner-text {
+            animation: fadeInOut 3s infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 10%, 90%, 100% { opacity: 0; transform: translateY(5px); }
+            20%, 80% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Layout */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #fff, var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .testimonial-card strong {
+            color: var(--accent-blue);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Form Wizard */
+        .wizard-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            z-index: 0;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 2px;
+            background: var(--accent-blue);
+            z-index: 1;
+            transition: width 0.4s ease;
+        }
+
+        .step-indicator {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--bg-color);
+            border: 2px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            z-index: 2;
+            transition: all 0.3s;
+        }
+
+        .step-indicator.active {
+            border-color: var(--accent-blue);
+            background: var(--accent-blue);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+        }
+
+        .step-indicator.completed {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+
+        .step-content {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #e5e7eb;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+        }
+
+        /* Role Cards (Step 1) */
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .role-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .role-card:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        .role-card.selected {
+            border-color: var(--accent-blue);
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        }
+
+        /* Brand Chips (Step 2) */
+        .brands-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .brand-chip {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        .brand-chip.selected {
+            border-color: var(--accent-purple);
+            background: rgba(124, 58, 237, 0.2);
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.3);
+        }
+
+        /* Accordions & Price Matrix (Step 3) */
+        .accordion {
+            margin-bottom: 15px;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .accordion-header {
+            padding: 15px 20px;
+            background: rgba(255,255,255,0.05);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .accordion-header:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        .accordion-header::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .accordion.open .accordion-header::after {
+            transform: rotate(45deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .accordion.open .accordion-content {
+            max-height: 2000px;
+        }
+
+        .product-row {
+            display: grid;
+            grid-template-columns: 1fr 120px 120px;
+            gap: 10px;
+            padding: 12px 20px;
+            border-top: 1px solid var(--card-border);
+            align-items: center;
+        }
+
+        @media (max-width: 600px) {
+            .product-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+
+        .product-name {
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .price-input-wrapper {
+            position: relative;
+        }
+
+        .price-input-wrapper::before {
+            content: '₹';
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .price-input {
+            width: 100%;
+            padding: 8px 10px 8px 25px;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .price-input:focus {
+            border-color: var(--accent-blue);
+            outline: none;
+        }
+
+        .model-input {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        .model-input:focus {
+            border-color: var(--accent-purple);
+            outline: none;
+        }
+
+        .price-counter {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--accent-blue);
+            border-radius: 8px;
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        /* Checkboxes */
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-top: 4px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-blue);
+        }
+
+        .checkbox-group label {
+            font-size: 0.9rem;
+            color: #d1d5db;
+        }
+
+        /* Buttons */
+        .wizard-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .btn-next {
+            background: var(--accent-blue);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: auto;
+        }
+
+        .btn-next:hover {
+            background: #00b8e6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Overlay & Success */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 15, 26, 0.95);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .gear-spinner {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .overlay-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(to right, #00d4ff, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #success-screen {
+            display: none;
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 5rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .savings-highlight {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-blue);
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        /* Floating WA */
+        .floating-wa {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+            z-index: 999;
+            text-decoration: none;
+            font-size: 2rem;
+            color: white;
+            transition: transform 0.3s;
+        }
+
+        .floating-wa:hover {
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <div class="flashing-banner" id="banner">
+        <span class="banner-text" id="bannerText">🔥 Save 10-20% on Every Purchase! Stop Overpaying Your Distributor!</span>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Check If Your Distributor Is Overcharging You</h1>
+            <p>Enter your current purchase prices — Get Direct Master-Distributor rates in 60 seconds. 100% Free & Confidential.</p>
+            
+            <div class="trust-badges">
+                <div class="badge">👥 500+ Dealers Already Switched</div>
+                <div class="badge">🛡️ Price-Beat Guarantee</div>
+                <div class="badge">🚚 Same Day Dispatch</div>
+            </div>
+
+            <button class="btn-primary" onclick="scrollToForm()">
+                Check My Prices Now &rarr;
+            </button>
+        </div>
+
+        <div class="testimonials">
+            <div class="testimonial-card">
+                <strong>Ravi, CCTV Installer, Bhubaneswar</strong>
+                "Switched to our rates. Now saves ₹8,000/month on bulk orders."
+            </div>
+            <div class="testimonial-card">
+                <strong>Suresh Electronics, Cuttack</strong>
+                "Getting direct CP Plus stock at 15% lower than my local distributor. Game changer."
+            </div>
+            <div class="testimonial-card">
+                <strong>Manoj DTH & Security, Rourkela</strong>
+                "Free next-day delivery on all orders above ₹5,000. Reliable and cheap."
+            </div>
+        </div>
+
+        <div class="wizard-container" id="form-wizard">
+            
+            <div id="form-content">
+                <div class="progress-bar">
+                    <div class="progress-line" id="progress-line" style="width: 0%;"></div>
+                    <div class="step-indicator active" data-step="1">1</div>
+                    <div class="step-indicator" data-step="2">2</div>
+                    <div class="step-indicator" data-step="3">3</div>
+                    <div class="step-indicator" data-step="4">4</div>
+                </div>
+
+                <div class="step-content active" id="step1">
+                    <h2 style="margin-bottom: 20px;">Tell Us About You</h2>
+                    
+                    <div class="form-group">
+                        <label>Your Role / Business Type</label>
+                        <div class="role-grid" id="roleGrid">
+                            <div class="role-card" data-val="Technician">Technician</div>
+                            <div class="role-card" data-val="CCTV Installer">CCTV Installer</div>
+                            <div class="role-card" data-val="Electrician">Electrician</div>
+                            <div class="role-card" data-val="DTH Installer">DTH Installer</div>
+                            <div class="role-card" data-val="Computer Shop">Computer/Printer Shop</div>
+                            <div class="role-card" data-val="Electrical Shop">Electrical Shop</div>
+                            <div class="role-card" data-val="Security Dealer">Security System Dealer</div>
+                            <div class="role-card" data-val="Other">Other</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="yearsBiz">Years in Business</label>
+                        <select id="yearsBiz" class="form-control">
+                            <option value="">Select an option</option>
+                            <option value="Less than 1 year">Less than 1 year</option>
+                            <option value="1-3 years">1-3 years</option>
+                            <option value="3-5 years">3-5 years</option>
+                            <option value="5-10 years">5-10 years</option>
+                            <option value="10+ years">10+ years</option>
+                        </select>
+                    </div>
+
+                    <div class="wizard-buttons">
+                        <div></div>
+                        <button class="btn-next" onclick="nextStep(2)">Next Step &rarr;</button>
+                    </div>
+                </div>
+
+                <div class="step-content" id="step2">
+                    <h2 style="margin-bottom: 20px;">Brands & Volume</h2>
+                    
+                    <div class="form-group">
+                        <label>Brands You Work With (Select Multiple)</label>
+                        <div class="brands-container" id="brandContainer">
+                            <div class="brand-chip">CP Plus</div>
+                            <div class="brand-chip">Hikvision</div>
+                            <div class="brand-chip">Dahua</div>
+                            <div class="brand-chip">Uniview / UNV</div>
+                            <div class="brand-chip">TP-Link</div>
+                            <div class="brand-chip">Secureye</div>
+                            <div class="brand-chip">Realtime</div>
+                            <div class="brand-chip">Honeywell</div>
+                            <div class="brand-chip">D-Link</div>
+                            <div class="brand-chip">Godrej</div>
+                            <div class="brand-chip">Samsung</div>
+                            <div class="brand-chip" id="otherBrandChip">Other</div>
+                        </div>
+                        <input type="text" id="otherBrandInput" class="form-control" placeholder="Specify other brands..." style="display:none; margin-top:10px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="monthlyVolume">How many CCTV setups do you install per month?</label>
+                        <select id="monthlyVolume" class="form-control">
+                            <option value="">Select volume</option>
+                            <option value="1-5">1-5</option>
+                            <option value="5-10">5-10</option>
+                            <option value="10-20">10-20</option>
+                            <option value="20-50">20-50</option>
+                            <option value="50+">50+</option>
+                        </select>
+                    </div>
+
+                    <div class="wizard-buttons">
+                        <button class="btn-secondary" onclick="prevStep(1)">&larr; Back</button>
+                        <button class="btn-next" onclick="nextStep(3)">Next Step &rarr;</button>
+                    </div>
+                </div>
+
+                <div class="step-content" id="step3">
+                    <h2 style="margin-bottom: 10px;">Your Current Purchase Prices</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Fill ONLY the products you regularly buy. Leave others blank.</p>
+
+                    <div id="products-container">
+                        <!-- Accordions generated via JS -->
+                    </div>
+
+                    <div class="price-counter" id="priceCounter">
+                        You've entered prices for 0 products
+                    </div>
+
+                    <div class="wizard-buttons">
+                        <button class="btn-secondary" onclick="prevStep(2)">&larr; Back</button>
+                        <button class="btn-next" onclick="nextStep(4)">See My Savings &rarr;</button>
+                    </div>
+                </div>
+
+                <div class="step-content" id="step4">
+                    <h2 style="margin-bottom: 20px;">Where Should We Send Your Rate Card?</h2>
+                    
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="fName" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>WhatsApp Number *</label>
+                        <div style="display:flex;">
+                            <span style="background:rgba(255,255,255,0.1); padding:12px; border-radius:8px 0 0 8px; border:1px solid rgba(255,255,255,0.1); border-right:none;">+91</span>
+                            <input type="tel" id="waNum" class="form-control" style="border-radius:0 8px 8px 0;" maxlength="10" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>City / District *</label>
+                        <input type="text" id="city" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Shop / Business Name (Optional)</label>
+                        <input type="text" id="shopName" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pincode (Optional)</label>
+                        <input type="text" id="pincode" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email (Optional)</label>
+                        <input type="email" id="email" class="form-control">
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="chkRateCard" checked>
+                        <label for="chkRateCard">I want to receive wholesale rate cards on WhatsApp</label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="chkDealer">
+                        <label for="chkDealer">I'm interested in becoming an authorized dealer</label>
+                    </div>
+
+                    <div class="wizard-buttons">
+                        <button class="btn-secondary" onclick="prevStep(3)">&larr; Back</button>
+                        <button class="btn-next" style="background:var(--success); color:white;" onclick="submitForm()">Get My Rate Card &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Screen -->
+            <div id="success-screen">
+                <div class="success-icon">✅</div>
+                <h2>Analysis Complete!</h2>
+                <p style="color:var(--text-muted); margin-top:10px;">Based on your current prices, you could save approximately:</p>
+                <div class="savings-highlight" id="savingsAmount">₹0</div>
+                <p>every single month!</p>
+                <br>
+                <p>Our team is verifying your profile. We will send you a detailed rate comparison on WhatsApp within 2 hours.</p>
+                
+                <a href="#" class="whatsapp-btn" id="waShareBtn">
+                    Share Rate Check with Friends
+                </a>
+                
+                <div style="margin-top:30px; font-size:0.9rem; color:var(--accent-purple);">
+                    🎁 Refer a fellow technician & get ₹500 credit on your first order!
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer>
+        <p style="font-size: 0.85rem; opacity: 0.6;">All prices are kept strictly confidential. We never share your data with competitors.</p>
+    </footer>
+
+
+
+    <!-- Overlay -->
+    <div id="overlay">
+        <div class="gear-spinner"></div>
+        <div class="overlay-text" id="overlayText">Analyzing your current rates...</div>
+    </div>
+
+    <script>
+        // Banner Messages
+        const bannerMsgs = [
+            "🔥 Save 10-20% on Every Purchase! Stop Overpaying Your Distributor!",
+            "💰 Why Are You Paying Higher? Get Direct Master-Distributor Rates!",
+            "⚡ Smart Dealers Save ₹5,000-₹15,000 Every Month — Are You?",
+            "🎯 Check Your Current Prices — We Will Beat Them Guaranteed!"
+        ];
+        let msgIndex = 0;
+        setInterval(() => {
+            msgIndex = (msgIndex + 1) % bannerMsgs.length;
+            document.getElementById('bannerText').innerText = bannerMsgs[msgIndex];
+        }, 3000);
+
+        // Particle background logic
+        const particlesContainer = document.getElementById('particles-js');
+        for(let i=0; i<30; i++) {
+            let p = document.createElement('div');
+            p.className = 'particle';
+            let size = Math.random() * 5 + 2;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            p.style.animationDelay = (Math.random() * 10) + 's';
+            particlesContainer.appendChild(p);
+        }
+
+        // Scroll to form
+        function scrollToForm() {
+            document.getElementById('form-wizard').scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+
+        // Form Wizard Logic
+        let currentStep = 1;
+
+        function updateProgress() {
+            const progress = ((currentStep - 1) / 3) * 100;
+            document.getElementById('progress-line').style.width = progress + '%';
+            
+            document.querySelectorAll('.step-indicator').forEach(ind => {
+                let stepNum = parseInt(ind.getAttribute('data-step'));
+                if (stepNum < currentStep) {
+                    ind.className = 'step-indicator completed';
+                } else if (stepNum === currentStep) {
+                    ind.className = 'step-indicator active';
+                } else {
+                    ind.className = 'step-indicator';
+                }
+            });
+        }
+
+        function nextStep(step) {
+            // Basic validation
+            if (currentStep === 1) {
+                if(!selectedRole) { alert("Please select your role."); return; }
+                if(!document.getElementById('yearsBiz').value) { alert("Please select years in business."); return; }
+            }
+            if (currentStep === 2) {
+                if(selectedBrands.length === 0) { alert("Please select at least one brand."); return; }
+                if(!document.getElementById('monthlyVolume').value) { alert("Please select monthly volume."); return; }
+            }
+
+            document.getElementById('step' + currentStep).classList.remove('active');
+            currentStep = step;
+            document.getElementById('step' + currentStep).classList.add('active');
+            updateProgress();
+        }
+
+        function prevStep(step) {
+            document.getElementById('step' + currentStep).classList.remove('active');
+            currentStep = step;
+            document.getElementById('step' + currentStep).classList.add('active');
+            updateProgress();
+        }
+
+        // Step 1: Roles
+        let selectedRole = "";
+        document.querySelectorAll('.role-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedRole = this.getAttribute('data-val');
+            });
+        });
+
+        // Step 2: Brands
+        let selectedBrands = [];
+        document.querySelectorAll('.brand-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                let brand = this.innerText;
+                
+                if (brand === 'Other') {
+                    const otherInput = document.getElementById('otherBrandInput');
+                    otherInput.style.display = this.classList.contains('selected') ? 'block' : 'none';
+                }
+
+                if (this.classList.contains('selected')) {
+                    selectedBrands.push(brand);
+                } else {
+                    selectedBrands = selectedBrands.filter(b => b !== brand);
+                }
+            });
+        });
+
+        // Step 3: Products Data
+        const productCategories = [
+            {
+                name: "📹 Analog / HD Cameras",
+                items: ["2MP Dome Camera (Indoor)", "2MP Bullet Camera (Outdoor)", "2MP Audio Dome Camera", "2MP Color Night Vision (ColorVu) Camera", "5MP Dome Camera", "5MP Bullet Camera"]
+            },
+            {
+                name: "🌐 IP / Network Cameras",
+                items: ["2MP IP Dome Camera (PoE)", "2MP IP Bullet Camera (PoE)", "4MP IP Dome Camera", "4MP IP Bullet Camera", "4MP Varifocal Camera", "PTZ Camera (2MP/4MP)"]
+            },
+            {
+                name: "📶 WiFi / Smart Cameras",
+                items: ["2MP WiFi Pan-Tilt Camera (360°)", "3MP WiFi Pan-Tilt Camera", "4MP WiFi Camera", "4G SIM Camera (Solar/Battery)"]
+            },
+            {
+                name: "📼 Recorders (DVR/NVR)",
+                items: ["4 Channel DVR", "8 Channel DVR", "16 Channel DVR", "4 Channel NVR", "8 Channel NVR", "16 Channel NVR", "32 Channel NVR"]
+            },
+            {
+                name: "💾 Surveillance Hard Drives",
+                items: ["500GB HDD (Refurbished)", "1TB Surveillance HDD", "2TB Surveillance HDD", "4TB Surveillance HDD (WD Purple / Seagate SkyHawk)", "6TB Surveillance HDD", "8TB Surveillance HDD"]
+            },
+            {
+                name: "⚡ Power Supply & Accessories",
+                items: ["4 Channel SMPS Power Supply", "8 Channel SMPS Power Supply", "16 Channel SMPS Power Supply", "Single Camera 12V 1A Adapter", "4+2 Port PoE Switch", "8+2 Port PoE Switch", "16+2 Port PoE Switch"]
+            },
+            {
+                name: "🔌 Cables & Connectors",
+                items: ["3+1 Copper Cable Coil (90m)", "3+1 Copper Cable Coil (180m)", "Cat6 Cable Spool (305m)", "BNC + DC Connector Set (per pair)", "RJ45 Connectors (Pack of 100)"]
+            },
+            {
+                name: "📡 Networking",
+                items: ["4G SIM Router (Single Antenna)", "4G SIM Router (Dual Antenna)", "WiFi Router (Basic)", "Network Switch (Unmanaged 5-port)", "Network Switch (Unmanaged 8-port)"]
+            }
+        ];
+
+        const productsContainer = document.getElementById('products-container');
+        
+        productCategories.forEach((cat, index) => {
+            let accordion = document.createElement('div');
+            accordion.className = 'accordion';
+            if (index === 0) accordion.classList.add('open');
+
+            let header = document.createElement('div');
+            header.className = 'accordion-header';
+            header.innerText = cat.name;
+            header.onclick = function() {
+                this.parentElement.classList.toggle('open');
+            };
+
+            let content = document.createElement('div');
+            content.className = 'accordion-content';
+
+            cat.items.forEach(item => {
+                let row = document.createElement('div');
+                row.className = 'product-row';
+                
+                row.innerHTML = `
+                    <div class="product-name">${item}</div>
+                    <div class="price-input-wrapper">
+                        <input type="number" class="price-input p-input" data-product="${item}" placeholder="Price">
+                    </div>
+                    <div>
+                        <input type="text" class="model-input m-input" data-product="${item}" placeholder="Model (Opt)">
+                    </div>
+                `;
+                content.appendChild(row);
+            });
+
+            accordion.appendChild(header);
+            accordion.appendChild(content);
+            productsContainer.appendChild(accordion);
+        });
+
+        // Price counter logic
+        let filledPrices = 0;
+        document.addEventListener('input', function(e) {
+            if(e.target.classList.contains('p-input')) {
+                let count = 0;
+                document.querySelectorAll('.p-input').forEach(inp => {
+                    if(inp.value.trim() !== '') count++;
+                });
+                filledPrices = count;
+                document.getElementById('priceCounter').innerText = `You've entered prices for ${count} products`;
+            }
+        });
+
+        // Submit form
+        function submitForm() {
+            // Validation
+            const name = document.getElementById('fName').value.trim();
+            const wa = document.getElementById('waNum').value.trim();
+            const city = document.getElementById('city').value.trim();
+            
+            if(!name || !wa || !city) {
+                alert("Please fill required fields (Name, WhatsApp, City).");
+                return;
+            }
+            if(wa.length < 10) {
+                alert("Please enter a valid 10-digit WhatsApp number.");
+                return;
+            }
+
+            // Gather Data
+            const prices = {};
+            const models = {};
+            let totalAmount = 0;
+
+            document.querySelectorAll('.p-input').forEach(inp => {
+                if (inp.value.trim() !== '') {
+                    prices[inp.getAttribute('data-product')] = inp.value;
+                    totalAmount += parseFloat(inp.value) || 0;
+                }
+            });
+
+            document.querySelectorAll('.m-input').forEach(inp => {
+                if (inp.value.trim() !== '') {
+                    models[inp.getAttribute('data-product')] = inp.value;
+                }
+            });
+
+            if (selectedBrands.includes("Other")) {
+                let ob = document.getElementById('otherBrandInput').value.trim();
+                if(ob) {
+                    selectedBrands[selectedBrands.indexOf("Other")] = "Other: " + ob;
+                }
+            }
+
+            const leadData = {
+                timestamp: new Date().toISOString(),
+                role: selectedRole,
+                yearsInBusiness: document.getElementById('yearsBiz').value,
+                brands: selectedBrands,
+                monthlyInstalls: document.getElementById('monthlyVolume').value,
+                prices: prices,
+                models: models,
+                name: name,
+                shopName: document.getElementById('shopName').value.trim(),
+                whatsapp: "+91" + wa,
+                city: city,
+                pincode: document.getElementById('pincode').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                wantsRateCard: document.getElementById('chkRateCard').checked,
+                wantsDealer: document.getElementById('chkDealer').checked
+            };
+
+            // Save to localStorage
+            let leads = JSON.parse(localStorage.getItem('b2b_leads') || '[]');
+            leads.push(leadData);
+            localStorage.setItem('b2b_leads', JSON.stringify(leads));
+            
+            let count = parseInt(localStorage.getItem('b2b_lead_count') || '0');
+            localStorage.setItem('b2b_lead_count', count + 1);
+
+            // Show Overlay overlay
+            document.getElementById('overlay').style.display = 'flex';
+            const oText = document.getElementById('overlayText');
+            
+            const msgs = [
+                "Comparing with 50+ distributors...",
+                "Calculating your potential savings...",
+                "Preparing your personalized rate card..."
+            ];
+            
+            let omIdx = 0;
+            let oInt = setInterval(() => {
+                if (omIdx < msgs.length) {
+                    oText.innerText = msgs[omIdx];
+                    omIdx++;
+                }
+            }, 1000);
+
+            // Calc savings (10-20% of total inputted for show)
+            let baseVal = totalAmount > 0 ? totalAmount : 25000;
+            let savingMin = Math.floor(baseVal * 0.10);
+            let savingMax = Math.floor(baseVal * 0.20);
+            if(totalAmount === 0) {
+                 savingMin = 5000;
+                 savingMax = 12000;
+            }
+
+            setTimeout(() => {
+                clearInterval(oInt);
+                document.getElementById('overlay').style.display = 'none';
+                
+                document.getElementById('form-content').style.display = 'none';
+                document.getElementById('success-screen').style.display = 'block';
+                
+                // Animate number
+                let targetMin = savingMin;
+                let targetMax = savingMax;
+                document.getElementById('savingsAmount').innerText = `₹${targetMin.toLocaleString()} - ₹${targetMax.toLocaleString()}`;
+                
+                // Scroll to top of wizard
+                document.getElementById('form-wizard').scrollIntoView({behavior: 'smooth', block: 'center'});
+                
+            }, 4000);
+        }
+
+    </script>
+</body>
+</html>

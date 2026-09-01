@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional CCTV Installation & Security Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0f1a;
+            --emerald: #10b981;
+            --cyan: #06b6d4;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
+        }
+
+        /* Top Banner */
+        .top-banner {
+            background: linear-gradient(90deg, var(--emerald), var(--cyan));
+            color: #fff;
+            text-align: center;
+            padding: 10px 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .banner-text {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .banner-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .banner-text.exit {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        /* Glassmorphism utility */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+        }
+
+        /* Button utility */
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--emerald), var(--cyan));
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #fff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 100px 0 60px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, var(--cyan), var(--emerald));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--emerald);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* Grid System */
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+
+        /* Why CCTV */
+        .feature-card {
+            padding: 30px;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        /* How it Works */
+        .step-card {
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.2));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Estimator Wizard */
+        .estimator-section {
+            position: relative;
+        }
+        
+        .wizard-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--glass-border);
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--emerald), var(--cyan));
+            width: 20%;
+            transition: width 0.4s ease;
+        }
+
+        .step-indicator {
+            text-align: center;
+            color: var(--emerald);
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .wizard-step {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .wizard-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Selectable Cards (Radio/Checkbox) */
+        .selectable-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .select-card {
+            padding: 20px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .select-card:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .select-card.selected {
+            border-color: var(--emerald);
+            background: rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .select-card .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Counter */
+        .counter-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .counter-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .counter-btn:hover { background: rgba(255,255,255,0.1); }
+        .counter-value { font-size: 3rem; font-weight: 700; width: 80px; text-align: center; }
+
+        .quick-chips {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .chip:hover, .chip.active {
+            background: var(--emerald);
+            color: white;
+            border-color: var(--emerald);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--emerald);
+        }
+
+        .wizard-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .tip-box {
+            background: rgba(6, 182, 212, 0.1);
+            border-left: 4px solid var(--cyan);
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 20px 0;
+        }
+
+        /* Loader */
+        .loader-overlay {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-color);
+            z-index: 10;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(16, 185, 129, 0.2);
+            border-top-color: var(--emerald);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Results */
+        .result-container {
+            text-align: center;
+        }
+
+        .price-box {
+            background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(6,182,212,0.1));
+            border: 1px solid var(--emerald);
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .price-row {
+            margin: 15px 0;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .price-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+        .price-title { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 5px; }
+        .price-amount { font-size: 2rem; font-weight: 700; color: #fff; }
+        
+        .includes-list {
+            text-align: left;
+            margin: 20px auto;
+            max-width: 400px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+        .includes-list li { margin-bottom: 10px; display: flex; align-items: center; }
+        .includes-list li::before { content: '✓'; color: var(--emerald); margin-right: 10px; font-weight: bold; }
+
+        /* Testimonials */
+        .testimonial-card {
+            padding: 30px;
+            text-align: left;
+        }
+        .stars { color: #fbbf24; margin-bottom: 15px; }
+        .testimonial-text { font-style: italic; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+        .author { font-weight: 600; color: #fff; }
+        .author-loc { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* FAQ */
+        .faq-item {
+            margin-bottom: 15px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .faq-item.open .faq-answer {
+            padding: 0 20px 20px;
+            max-height: 200px;
+        }
+        .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--emerald); }
+        .faq-icon { transition: transform 0.3s ease; font-size: 1.2rem; }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--glass-border);
+            padding: 40px 0 20px;
+            text-align: center;
+            color: var(--text-muted);
+        }
+        
+        /* Floating Buttons */
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-decoration: none;
+            z-index: 99;
+            transition: transform 0.3s;
+        }
+        .fab:hover { transform: scale(1.1); }
+        .fab-wa { right: 20px; background: #25D366; }
+        .fab-call { left: 20px; background: var(--cyan); display: none; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero-btns { flex-direction: column; }
+            .fab-call { display: flex; }
+            .wizard-container { padding: 20px; }
+            .step-title { font-size: 1.4rem; }
+            .selectable-grid { grid-template-columns: 1fr; }
+            .wizard-footer { flex-direction: column-reverse; gap: 15px; }
+            .wizard-footer .btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Banner -->
+    <div class="top-banner">
+        <div class="banner-text active">🔒 Professional CCTV Installation Starting at ₹4,999 — Get Free Survey!</div>
+        <div class="banner-text">📱 Watch Your Home/Shop LIVE on Mobile — 24/7 Remote Monitoring</div>
+        <div class="banner-text">🛡️ 2-Year Warranty + Free Installation + Free Demo</div>
+        <div class="banner-text">⭐ Trusted by 1000+ Homes & Businesses in Odisha</div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Protect What Matters Most</h1>
+            <p>Get a complete CCTV security system installed at your home, shop, or office. Free site survey. Professional installation. Watch live on your phone.</p>
+            
+            <div class="trust-badges">
+                <span class="badge">✓ Free Installation</span>
+                <span class="badge">✓ 2-Year Warranty</span>
+                <span class="badge">✓ Mobile Viewing</span>
+                <span class="badge">✓ 24/7 Support</span>
+            </div>
+
+            <div class="hero-btns">
+                <a href="#estimator" class="btn btn-primary" onclick="startEstimator()">Get Free Quote →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why CCTV Section -->
+    <section>
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Choose Our CCTV Solutions?</h2>
+                <p style="color: var(--text-muted)">Tailored security for every environment</p>
+            </div>
+            <div class="grid-4">
+                <div class="feature-card glass">
+                    <div class="feature-icon">🏠</div>
+                    <h3>Home Security</h3>
+                    <p>Keep your family safe. Monitor entry points, parking, and surroundings 24/7.</p>
+                </div>
+                <div class="feature-card glass">
+                    <div class="feature-icon">🏪</div>
+                    <h3>Shop & Showroom</h3>
+                    <p>Prevent theft, monitor employees, and review footage anytime from your phone.</p>
+                </div>
+                <div class="feature-card glass">
+                    <div class="feature-icon">🏢</div>
+                    <h3>Office & Warehouse</h3>
+                    <p>Track attendance, secure inventory, and ensure workplace safety.</p>
+                </div>
+                <div class="feature-card glass">
+                    <div class="feature-icon">🏗️</div>
+                    <h3>Factory & Construction</h3>
+                    <p>Monitor large areas with PTZ cameras and secure remote access.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section style="background: rgba(0,0,0,0.3);">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p style="color: var(--text-muted)">Simple, transparent, and hassle-free process</p>
+            </div>
+            <div class="grid-3">
+                <div class="step-card">
+                    <div class="step-icon">📋</div>
+                    <h3>1. Tell Us Your Needs</h3>
+                    <p style="color: var(--text-muted); margin-top: 10px;">Answer a few quick questions about your space to help us understand.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">💰</div>
+                    <h3>2. Get Instant Estimate</h3>
+                    <p style="color: var(--text-muted); margin-top: 10px;">See your estimated cost immediately based on your exact requirements.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">🔧</div>
+                    <h3>3. We Install & Setup</h3>
+                    <p style="color: var(--text-muted); margin-top: 10px;">Our technician visits, installs, and configures everything flawlessly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Estimator Wizard -->
+    <section id="estimator" class="estimator-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Instant CCTV Cost Estimator</h2>
+                <p style="color: var(--text-muted)">Find out how much your setup will cost in 60 seconds.</p>
+            </div>
+
+            <div class="wizard-container glass">
+                
+                <div class="loader-overlay" id="loader">
+                    <div class="spinner"></div>
+                    <h3 style="color: #fff">Calculating your estimate...</h3>
+                </div>
+
+                <div class="step-indicator" id="stepIndicator">Step 1 of 5</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <!-- Step 1 -->
+                <div class="wizard-step active" id="step1">
+                    <h3 class="step-title">Where do you need CCTV?</h3>
+                    <div class="selectable-grid" id="locationType">
+                        <div class="select-card glass" data-val="Home">
+                            <span class="icon">🏠</span>Home / Apartment
+                        </div>
+                        <div class="select-card glass" data-val="Shop">
+                            <span class="icon">🏪</span>Shop / Showroom
+                        </div>
+                        <div class="select-card glass" data-val="Office">
+                            <span class="icon">🏢</span>Office / Clinic
+                        </div>
+                        <div class="select-card glass" data-val="Warehouse">
+                            <span class="icon">🏭</span>Warehouse / Factory
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="locOther" class="form-control" placeholder="Other (Please specify)">
+                    </div>
+                    <div class="wizard-footer">
+                        <div></div>
+                        <button class="btn btn-primary" onclick="nextStep(2)">Next Step →</button>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="wizard-step" id="step2">
+                    <h3 class="step-title">How many cameras do you need?</h3>
+                    
+                    <div class="quick-chips" id="camChips">
+                        <div class="chip" onclick="setCam(2)">2 Cameras</div>
+                        <div class="chip" onclick="setCam(4)">4 Cameras</div>
+                        <div class="chip" onclick="setCam(8)">8 Cameras</div>
+                        <div class="chip" onclick="setCam(16)">16 Cameras</div>
+                    </div>
+
+                    <div class="counter-wrapper">
+                        <button class="counter-btn" onclick="updateCam(-1)">-</button>
+                        <div class="counter-value" id="camCount">4</div>
+                        <button class="counter-btn" onclick="updateCam(1)">+</button>
+                    </div>
+
+                    <div class="tip-box">
+                        💡 Not sure? As a guide: 2-bedroom home = 2-4 cameras, Small shop = 4-6 cameras, Office = 6-12 cameras.
+                    </div>
+
+                    <div class="wizard-footer">
+                        <button class="btn btn-secondary" onclick="prevStep(1)">← Back</button>
+                        <button class="btn btn-primary" onclick="nextStep(3)">Next Step →</button>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="wizard-step" id="step3">
+                    <h3 class="step-title">What features do you need? (Select all that apply)</h3>
+                    <div class="selectable-grid multi-select" id="features">
+                        <div class="select-card glass selected" data-val="NightVision">
+                            <span class="icon">🌙</span>Night Vision (Standard)
+                        </div>
+                        <div class="select-card glass" data-val="ColorNightVision">
+                            <span class="icon">🌈</span>Color Night Vision
+                        </div>
+                        <div class="select-card glass" data-val="Audio">
+                            <span class="icon">🔊</span>Audio Recording
+                        </div>
+                        <div class="select-card glass" data-val="WiFi">
+                            <span class="icon">📶</span>WiFi / Wireless
+                        </div>
+                        <div class="select-card glass" data-val="PTZ">
+                            <span class="icon">🔄</span>360° PTZ Camera
+                        </div>
+                        <div class="select-card glass selected" data-val="Mobile">
+                            <span class="icon">📱</span>Mobile App Viewing
+                        </div>
+                    </div>
+                    <div class="wizard-footer">
+                        <button class="btn btn-secondary" onclick="prevStep(2)">← Back</button>
+                        <button class="btn btn-primary" onclick="nextStep(4)">Next Step →</button>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="wizard-step" id="step4">
+                    <h3 class="step-title">Recording & Storage Days</h3>
+                    <div class="selectable-grid" id="storageDays">
+                        <div class="select-card glass" data-val="7">7 Days</div>
+                        <div class="select-card glass selected" data-val="15">15 Days</div>
+                        <div class="select-card glass" data-val="30">30 Days</div>
+                        <div class="select-card glass" data-val="60">60 Days</div>
+                        <div class="select-card glass" data-val="90">90 Days</div>
+                    </div>
+                    <div class="tip-box">
+                        💡 Most homes choose 15-30 days. Shops and offices typically need 30-60 days for compliance.
+                    </div>
+                    <div class="wizard-footer">
+                        <button class="btn btn-secondary" onclick="prevStep(3)">← Back</button>
+                        <button class="btn btn-primary" onclick="nextStep(5)">Next Step →</button>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="wizard-step" id="step5">
+                    <h3 class="step-title">Your Contact Details</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="custName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp Number *</label>
+                            <input type="tel" id="custPhone" class="form-control" placeholder="+91" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Location / Area / City *</label>
+                        <input type="text" id="custLoc" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred time for FREE site survey</label>
+                        <select id="custTime" class="form-control" style="appearance: auto;">
+                            <option>Morning</option>
+                            <option>Afternoon</option>
+                            <option>Evening</option>
+                            <option>Weekend</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-top: 20px;">
+                        <input type="checkbox" id="waCheck" checked style="width: 20px; height: 20px; accent-color: var(--emerald);">
+                        <label style="margin:0;">Send me the quote on WhatsApp</label>
+                    </div>
+                    <p id="formError" style="color: #ef4444; display: none; margin-bottom: 15px;">Please fill all required fields.</p>
+                    <div class="wizard-footer">
+                        <button class="btn btn-secondary" onclick="prevStep(4)">← Back</button>
+                        <button class="btn btn-primary" onclick="calculateEstimate()">Get My Estimate ⚡</button>
+                    </div>
+                </div>
+
+                <!-- Result Step -->
+                <div class="wizard-step" id="stepResult">
+                    <div class="result-container">
+                        <h3 class="step-title" style="color: var(--emerald);">Your Estimate is Ready!</h3>
+                        
+                        <div class="price-box">
+                            <div class="price-row">
+                                <div class="price-title">Basic Setup (Standard Definition / Analog)</div>
+                                <div class="price-amount" id="resBasic">₹0</div>
+                            </div>
+                            <div class="price-row">
+                                <div class="price-title">Premium Setup (High Definition IP / WiFi)</div>
+                                <div class="price-amount" id="resPremium">₹0</div>
+                            </div>
+                        </div>
+
+                        <ul class="includes-list">
+                            <li>Cameras + DVR/NVR + Hard Drive</li>
+                            <li>Professional Installation</li>
+                            <li>Wiring & Accessories</li>
+                            <li>Mobile App Configuration</li>
+                            <li>2-Year Replacement Warranty</li>
+                        </ul>
+
+                        <div style="margin-top: 40px;">
+                            <p class="btn btn-primary" style="width: 100%; max-width: 300px; margin-bottom: 15px; text-align: center; display: inline-block;">✅ Quote Request Submitted!</p>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">Our team will contact you within 30 minutes to confirm your FREE site survey.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section>
+        <div class="container">
+            <div class="section-header">
+                <h2>Trusted by 1000+ Customers</h2>
+            </div>
+            <div class="grid-3">
+                <div class="testimonial-card glass">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Got 4 cameras installed at my grocery shop. Can see everything on my phone now. Excellent service and very polite technicians!"</p>
+                    <div class="author">Ramesh K.</div>
+                    <div class="author-loc">Bhubaneswar</div>
+                </div>
+                <div class="testimonial-card glass">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Very professional installation. The night vision is crystal clear. I feel much safer leaving my home now. Highly recommend!"</p>
+                    <div class="author">Priya S.</div>
+                    <div class="author-loc">Cuttack</div>
+                </div>
+                <div class="testimonial-card glass">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"They installed 8 cameras at my warehouse within a single day. The wire routing was very neat. Best price I found anywhere."</p>
+                    <div class="author">Sandeep M.</div>
+                    <div class="author-loc">Rourkela</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section style="background: rgba(0,0,0,0.3);">
+        <div class="container" style="max-width: 800px;">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">How long does installation take? <span class="faq-icon">+</span></div>
+                    <div class="faq-answer">Most installations are completed within 2-4 hours depending on the number of cameras and site complexity.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I watch cameras on my phone? <span class="faq-icon">+</span></div>
+                    <div class="faq-answer">Yes! We set up mobile viewing on your smartphone (Android & iOS) during installation. Watch live from anywhere in the world.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What if a camera stops working? <span class="faq-icon">+</span></div>
+                    <div class="faq-answer">All our cameras come with a 2-year replacement warranty. We provide free on-site support if any manufacturing defect occurs.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is wiring included in the price? <span class="faq-icon">+</span></div>
+                    <div class="faq-answer">Yes, standard wiring up to 30 meters per camera is included free of charge in our estimate.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p style="font-size: 0.85rem; opacity: 0.6;">Professional CCTV Installation &amp; Security Solutions</p>
+            <p style="font-size: 0.8rem; opacity: 0.4; margin-top: 8px;">&copy; 2026 All rights reserved.</p>
+        </div>
+    </footer>
+
+
+
+
+    <script>
+        // Banner Rotation
+        const banners = document.querySelectorAll('.banner-text');
+        let currentBanner = 0;
+        setInterval(() => {
+            banners[currentBanner].classList.remove('active');
+            banners[currentBanner].classList.add('exit');
+            
+            setTimeout(() => {
+                banners[currentBanner].classList.remove('exit');
+                currentBanner = (currentBanner + 1) % banners.length;
+                banners[currentBanner].classList.add('active');
+            }, 500);
+        }, 3500);
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', () => {
+                const parent = item.parentElement;
+                const isOpen = parent.classList.contains('open');
+                
+                document.querySelectorAll('.faq-item').forEach(faq => faq.classList.remove('open'));
+                
+                if (!isOpen) {
+                    parent.classList.add('open');
+                }
+            });
+        });
+
+        // Wizard Logic
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        // Selections State
+        const state = {
+            location: 'Home',
+            cameras: 4,
+            features: ['NightVision', 'Mobile'],
+            storage: '15'
+        };
+
+        // Single Select Logic
+        function setupSingleSelect(containerId, stateKey) {
+            const container = document.getElementById(containerId);
+            const cards = container.querySelectorAll('.select-card');
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    cards.forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    state[stateKey] = card.dataset.val;
+                });
+            });
+        }
+        setupSingleSelect('locationType', 'location');
+        setupSingleSelect('storageDays', 'storage');
+
+        // Multi Select Logic
+        const featureCards = document.querySelectorAll('#features .select-card');
+        featureCards.forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('selected');
+                const val = card.dataset.val;
+                if (card.classList.contains('selected')) {
+                    if (!state.features.includes(val)) state.features.push(val);
+                } else {
+                    state.features = state.features.filter(f => f !== val);
+                }
+            });
+        });
+
+        // Camera Counter Logic
+        function updateCam(change) {
+            let newVal = state.cameras + change;
+            if (newVal >= 1 && newVal <= 32) {
+                setCam(newVal);
+            }
+        }
+        function setCam(val) {
+            state.cameras = val;
+            document.getElementById('camCount').innerText = val;
+            
+            document.querySelectorAll('.chip').forEach(c => {
+                if (parseInt(c.innerText) === val) c.classList.add('active');
+                else c.classList.remove('active');
+            });
+        }
+
+        // Navigation
+        function nextStep(step) {
+            if(step === 6) return; // Prevent going beyond
+            
+            document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            currentStep = step;
+            updateProgress();
+        }
+
+        function prevStep(step) {
+            document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            currentStep = step;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const perc = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = `${perc}%`;
+            document.getElementById('stepIndicator').innerText = `Step ${currentStep} of ${totalSteps}`;
+            
+            if (currentStep > totalSteps) {
+                document.getElementById('stepIndicator').style.display = 'none';
+                document.querySelector('.progress-bar').style.display = 'none';
+            }
+        }
+
+        function startEstimator() {
+            // smooth scroll to estimator
+            document.getElementById('estimator').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Calculation & Submission
+        function calculateEstimate() {
+            // Validate step 5
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const loc = document.getElementById('custLoc').value.trim();
+            
+            if(!name || !phone || !loc) {
+                document.getElementById('formError').style.display = 'block';
+                return;
+            }
+            document.getElementById('formError').style.display = 'none';
+
+            // Show Loader
+            document.getElementById('loader').style.display = 'flex';
+
+            // Cost Logic
+            let camCount = state.cameras;
+            
+            // Recorders
+            let dvrPrice = camCount <= 4 ? 2500 : (camCount <= 8 ? 4000 : 7000);
+            let nvrPrice = camCount <= 4 ? 4500 : (camCount <= 8 ? 7000 : 14000);
+
+            // Storage
+            const hddPrices = { '7': 1500, '15': 3000, '30': 5000, '60': 8500, '90': 12000 };
+            let hddPrice = hddPrices[state.storage] || 3000;
+
+            // Base per camera setup
+            let labor = 500 * camCount;
+            let cable = 300 * camCount;
+            let accessories = 200 * camCount;
+
+            // Cameras
+            let analogCam = 1500 * camCount;
+            let ipCam = 3500 * camCount;
+
+            // Premium Features
+            let premiumAdds = 0;
+            if(state.features.includes('ColorNightVision')) premiumAdds += (800 * camCount);
+            if(state.features.includes('WiFi')) premiumAdds += (1500 * camCount);
+            if(state.features.includes('PTZ')) premiumAdds += (5000 * Math.max(1, Math.floor(camCount/4))); // Assuming 1 PTZ per 4 cams
+
+            // Totals
+            let basicTotal = analogCam + dvrPrice + hddPrice + labor + cable + accessories;
+            let premiumTotal = ipCam + nvrPrice + hddPrice + labor + cable + accessories + premiumAdds;
+
+            // Format numbers
+            const formatRs = (num) => '₹' + num.toLocaleString('en-IN');
+            
+            // Build Lead Object
+            const leadData = {
+                timestamp: new Date().toISOString(),
+                locationType: state.location === 'Other' ? document.getElementById('locOther').value : state.location,
+                cameraCount: state.cameras,
+                features: state.features,
+                storageDays: state.storage,
+                name: name,
+                whatsapp: phone,
+                location: loc,
+                preferredTime: document.getElementById('custTime').value,
+                sendWhatsappQuote: document.getElementById('waCheck').checked,
+                estimatedBasicCost: basicTotal,
+                estimatedPremiumCost: premiumTotal
+            };
+
+            // Save to localStorage
+            saveLeadData(leadData);
+
+            // Mock network delay then show result
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+                
+                // Show range +/- 10%
+                let basicMin = Math.floor(basicTotal * 0.9 / 100) * 100;
+                let basicMax = Math.ceil(basicTotal * 1.1 / 100) * 100;
+                let premMin = Math.floor(premiumTotal * 0.9 / 100) * 100;
+                let premMax = Math.ceil(premiumTotal * 1.1 / 100) * 100;
+
+                document.getElementById('resBasic').innerText = `${formatRs(basicMin)} - ${formatRs(basicMax)}`;
+                document.getElementById('resPremium').innerText = `${formatRs(premMin)} - ${formatRs(premMax)}`;
+
+                document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
+                document.getElementById('stepResult').classList.add('active');
+                currentStep++;
+                updateProgress();
+
+            }, 2000);
+        }
+
+        function saveLeadData(data) {
+            try {
+                let leads = JSON.parse(localStorage.getItem('b2c_leads') || '[]');
+                leads.push(data);
+                localStorage.setItem('b2c_leads', JSON.stringify(leads));
+                
+                let count = parseInt(localStorage.getItem('b2c_lead_count') || '0');
+                localStorage.setItem('b2c_lead_count', count + 1);
+            } catch (e) {
+                console.error('Error saving lead data', e);
+            }
+        }
+    </script>
+</body>
+</html>

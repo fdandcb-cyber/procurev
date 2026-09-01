@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | SecureVision Wholesale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0f1a;
+            --bg-card: #111827;
+            --bg-card-hover: #1f2937;
+            --accent: #f59e0b;
+            --accent-hover: #d97706;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: #374151;
+            --success: #10b981;
+            --danger: #ef4444;
+            --glass-bg: rgba(17, 24, 39, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-danger { color: var(--danger); }
+        .flex { display: flex; }
+        .justify-between { justify-content: space-between; }
+        .align-center { align-items: center; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        
+        /* Buttons */
+        .btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .btn:hover { background: var(--bg-card-hover); }
+        .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-danger { background: var(--danger); border-color: var(--danger); color: white; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-success { background: var(--success); border-color: var(--success); color: white; }
+        .btn-success:hover { background: #059669; }
+
+        /* Login Screen */
+        #login-screen {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #111827 0%, #0a0f1a 100%);
+        }
+        .login-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 2.5rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .login-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+        .login-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        .login-input:focus { outline: none; border-color: var(--accent); }
+        .error-shake {
+            animation: shake 0.5s;
+            border-color: var(--danger) !important;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Layout */
+        #dashboard { display: none; }
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .main-content { padding: 2rem; max-width: 1400px; margin: 0 auto; }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .stat-icon {
+            font-size: 2rem;
+            color: var(--accent);
+            background: rgba(245, 158, 11, 0.1);
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stat-value { font-size: 1.75rem; font-weight: 700; margin-top: 0.25rem; }
+        .stat-label { color: var(--text-muted); font-size: 0.875rem; font-weight: 500; }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0;
+        }
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .tab:hover { color: var(--text-main); }
+        .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        /* Tables & Filters */
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .filters { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .filter-input {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+        .table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 1rem; border-bottom: 1px solid var(--border-color); }
+        th {
+            background: rgba(0,0,0,0.2);
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        tr:hover { background: var(--bg-card-hover); }
+        tr:last-child td { border-bottom: none; }
+        
+        .tag {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin: 2px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--bg-card);
+            z-index: 2;
+        }
+        .modal-body { padding: 1.5rem; }
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            bottom: 0;
+            background: var(--bg-card);
+            z-index: 2;
+        }
+        
+        .price-input {
+            width: 80px;
+            background: var(--bg-dark);
+            border: 1px solid var(--accent);
+            color: white;
+            padding: 0.4rem;
+            border-radius: 4px;
+        }
+
+        .close-btn { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
+        .close-btn:hover { color: white; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header { flex-direction: column; gap: 1rem; padding: 1rem; text-align: center; }
+            .controls-bar { flex-direction: column; align-items: stretch; }
+            .filters { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Screen -->
+    <div id="login-screen">
+        <div class="login-card">
+            <i class="fas fa-lock login-icon"></i>
+            <h2 style="margin-bottom: 0.5rem;">Admin Access</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem;">Internal System Login</p>
+            <form id="login-form">
+                <input type="password" id="password" class="login-input" placeholder="Enter password" required>
+                <div id="login-error" class="text-danger hidden" style="margin-bottom: 1rem; font-size: 0.875rem;">Incorrect password</div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login to Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard">
+        <header class="header">
+            <div class="flex align-center gap-2">
+                <i class="fas fa-shield-alt text-accent" style="font-size: 1.5rem;"></i>
+                <h2>Admin Dashboard</h2>
+            </div>
+            <div class="flex gap-4 align-center">
+                <span style="color: var(--text-muted); font-size: 0.875rem;" id="current-time"></span>
+                <button class="btn" onclick="refreshData()" title="Refresh Data"><i class="fas fa-sync-alt"></i></button>
+                <button class="btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
+                    <div>
+                        <div class="stat-label">Total B2B Leads</div>
+                        <div class="stat-value" id="stat-b2b-total">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div>
+                        <div class="stat-label">Total B2C Leads</div>
+                        <div class="stat-value" id="stat-b2c-total">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                    <div>
+                        <div class="stat-label">Today's Leads</div>
+                        <div class="stat-value" id="stat-today">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-tags"></i></div>
+                    <div>
+                        <div class="stat-label">Total Products Priced (B2B)</div>
+                        <div class="stat-value" id="stat-products">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('b2b')">B2B Leads (Technicians)</div>
+                <div class="tab" onclick="switchTab('b2c')">B2C Leads (Customers)</div>
+            </div>
+
+            <!-- B2B Section -->
+            <section id="section-b2b">
+                <div class="controls-bar">
+                    <div class="filters">
+                        <input type="text" id="b2b-search" class="filter-input" placeholder="Search name/shop/city..." oninput="renderB2BTable()">
+                        <select id="b2b-role-filter" class="filter-input" onchange="renderB2BTable()">
+                            <option value="">All Roles</option>
+                            <option value="CCTV Technician">CCTV Technician</option>
+                            <option value="Electrician">Electrician</option>
+                            <option value="Shop Owner">Shop Owner</option>
+                            <option value="IT Vendor">IT Vendor</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="btn btn-primary" onclick="exportCSV('b2b')"><i class="fas fa-file-csv"></i> Export CSV</button>
+                        <button class="btn btn-danger" onclick="clearData('b2b')"><i class="fas fa-trash-alt"></i> Clear All</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="b2b-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Date & Time</th>
+                                <th>Name</th>
+                                <th>Shop Name</th>
+                                <th>Role</th>
+                                <th>City</th>
+                                <th>Brands</th>
+                                <th>Products</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="b2b-tbody">
+                            <!-- Rows will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- B2C Section -->
+            <section id="section-b2c" class="hidden">
+                <div class="controls-bar">
+                    <div class="filters">
+                        <input type="text" id="b2c-search" class="filter-input" placeholder="Search name/location..." oninput="renderB2CTable()">
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="btn btn-primary" onclick="exportCSV('b2c')"><i class="fas fa-file-csv"></i> Export CSV</button>
+                        <button class="btn btn-danger" onclick="clearData('b2c')"><i class="fas fa-trash-alt"></i> Clear All</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="b2c-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Date & Time</th>
+                                <th>Name</th>
+                                <th>WhatsApp</th>
+                                <th>Location</th>
+                                <th>Type</th>
+                                <th>Cameras</th>
+                                <th>Est. Cost</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="b2c-tbody">
+                            <!-- Rows will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- B2B Details Modal -->
+    <div id="b2b-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-tie text-accent"></i> Lead Details & Quote Generator</h3>
+                <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-lead-info" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; background: var(--bg-dark); padding: 1rem; border-radius: 8px;">
+                    <!-- Info injected here -->
+                </div>
+                
+                <h4 style="margin-bottom: 1rem;">Price Comparison & Quotation</h4>
+                <div class="table-container">
+                    <table id="modal-price-table">
+                        <thead>
+                            <tr>
+                                <th>Product Category</th>
+                                <th>Model No.</th>
+                                <th>Their Price (₹)</th>
+                                <th>Our Offer (₹)</th>
+                                <th>Margin/Savings</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal-price-tbody">
+                            <!-- Prices injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <h3 id="total-savings" class="text-success">Total Potential Savings: ₹0</h3>
+                    <p style="color: var(--text-muted); font-size: 0.8rem;">(Assuming 1 qty each per month)</p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn" onclick="closeModal()">Cancel</button>
+                    <button class="btn btn-success" onclick="generateWhatsAppQuote()"><i class="fab fa-whatsapp"></i> Send Quote on WhatsApp</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data variables
+        let b2bLeads = [];
+        let b2cLeads = [];
+        let currentModalLead = null;
+
+        // Formatter for currency
+        const formatINR = (amount) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
+        
+        // Helper to format date
+        const formatDate = (isoString) => {
+            const d = new Date(isoString);
+            return d.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute:'2-digit' });
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            if(sessionStorage.getItem('admin_logged_in') === 'true') {
+                showDashboard();
+            }
+            
+            // Realtime clock
+            setInterval(() => {
+                document.getElementById('current-time').innerText = new Date().toLocaleString('en-IN');
+            }, 1000);
+            
+            // Login handler
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const pwd = document.getElementById('password').value;
+                const err = document.getElementById('login-error');
+                const input = document.getElementById('password');
+                
+                if (pwd === 'admin2026') {
+                    sessionStorage.setItem('admin_logged_in', 'true');
+                    showDashboard();
+                } else {
+                    err.classList.remove('hidden');
+                    input.classList.add('error-shake');
+                    setTimeout(() => input.classList.remove('error-shake'), 500);
+                }
+            });
+        });
+
+        function showDashboard() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            loadData();
+        }
+
+        function logout() {
+            sessionStorage.removeItem('admin_logged_in');
+            document.getElementById('password').value = '';
+            document.getElementById('login-error').classList.add('hidden');
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+        }
+
+        function loadData() {
+            try {
+                b2bLeads = JSON.parse(localStorage.getItem('b2b_leads')) || [];
+                b2cLeads = JSON.parse(localStorage.getItem('b2c_leads')) || [];
+            } catch (e) {
+                console.error("Error reading from localStorage", e);
+                b2bLeads = [];
+                b2cLeads = [];
+            }
+            
+            // Sort newest first
+            b2bLeads.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            b2cLeads.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            updateStats();
+            renderB2BTable();
+            renderB2CTable();
+        }
+        
+        function refreshData() {
+            loadData();
+            // Flash success effect
+            const btn = document.querySelector('button[title="Refresh Data"]');
+            const origColor = btn.style.color;
+            btn.style.color = 'var(--success)';
+            setTimeout(() => btn.style.color = origColor, 1000);
+        }
+
+        function updateStats() {
+            document.getElementById('stat-b2b-total').innerText = b2bLeads.length;
+            document.getElementById('stat-b2c-total').innerText = b2cLeads.length;
+            
+            const today = new Date().toDateString();
+            const todayCount = 
+                b2bLeads.filter(l => new Date(l.timestamp).toDateString() === today).length +
+                b2cLeads.filter(l => new Date(l.timestamp).toDateString() === today).length;
+            document.getElementById('stat-today').innerText = todayCount;
+            
+            const totalProductsPriced = b2bLeads.reduce((sum, lead) => {
+                return sum + (lead.prices ? Object.keys(lead.prices).length : 0);
+            }, 0);
+            document.getElementById('stat-products').innerText = totalProductsPriced;
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            
+            if(tabId === 'b2b') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('section-b2b').classList.remove('hidden');
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('section-b2c').classList.remove('hidden');
+            }
+        }
+
+        // B2B Table
+        function renderB2BTable() {
+            const tbody = document.getElementById('b2b-tbody');
+            const search = document.getElementById('b2b-search').value.toLowerCase();
+            const roleFilter = document.getElementById('b2b-role-filter').value;
+            
+            tbody.innerHTML = '';
+            
+            const filtered = b2bLeads.filter(lead => {
+                const matchSearch = (lead.name?.toLowerCase().includes(search) || 
+                                     lead.shopName?.toLowerCase().includes(search) || 
+                                     lead.city?.toLowerCase().includes(search));
+                const matchRole = roleFilter ? lead.role === roleFilter : true;
+                return matchSearch && matchRole;
+            });
+            
+            if(filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color: var(--text-muted);">No B2B leads found.</td></tr>`;
+                return;
+            }
+            
+            filtered.forEach((lead, idx) => {
+                const brandsHtml = (lead.brands || []).map(b => `<span class="tag">${b}</span>`).join('');
+                const prodCount = lead.prices ? Object.keys(lead.prices).length : 0;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${idx + 1}</td>
+                    <td><div style="font-size:0.85rem">${formatDate(lead.timestamp)}</div></td>
+                    <td><strong>${lead.name || '-'}</strong></td>
+                    <td>${lead.shopName || '-'}</td>
+                    <td><span class="tag" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">${lead.role || '-'}</span></td>
+                    <td>${lead.city || '-'}</td>
+                    <td>${brandsHtml}</td>
+                    <td>${prodCount} items</td>
+                    <td>
+                        <div class="flex gap-2">
+                            <button class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick='openB2BModal(${JSON.stringify(lead).replace(/'/g, "&apos;")})'><i class="fas fa-eye"></i></button>
+                            <a href="https://wa.me/91${lead.whatsapp}?text=Hello%20${encodeURIComponent(lead.name)},%20greeting%20from%20SecureVision%20Wholesale!" target="_blank" class="btn btn-success" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;"><i class="fab fa-whatsapp"></i></a>
+                            <button class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="deleteLead('b2b', '${lead.timestamp}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // B2C Table
+        function renderB2CTable() {
+            const tbody = document.getElementById('b2c-tbody');
+            const search = document.getElementById('b2c-search').value.toLowerCase();
+            
+            tbody.innerHTML = '';
+            
+            const filtered = b2cLeads.filter(lead => {
+                return (lead.name?.toLowerCase().includes(search) || 
+                        lead.location?.toLowerCase().includes(search) ||
+                        lead.whatsapp?.includes(search));
+            });
+            
+            if(filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color: var(--text-muted);">No B2C leads found.</td></tr>`;
+                return;
+            }
+            
+            filtered.forEach((lead, idx) => {
+                const tr = document.createElement('tr');
+                const estCost = lead.estimatedBasicCost ? `${formatINR(lead.estimatedBasicCost)} - ${formatINR(lead.estimatedPremiumCost)}` : 'N/A';
+                
+                tr.innerHTML = `
+                    <td>${idx + 1}</td>
+                    <td><div style="font-size:0.85rem">${formatDate(lead.timestamp)}</div></td>
+                    <td><strong>${lead.name || '-'}</strong></td>
+                    <td><a href="https://wa.me/91${lead.whatsapp}" class="text-accent" target="_blank">${lead.whatsapp || '-'}</a></td>
+                    <td>${lead.location || '-'}</td>
+                    <td>${lead.locationType || '-'}</td>
+                    <td>${lead.cameraCount || '-'}</td>
+                    <td><span style="color:var(--success)">${estCost}</span></td>
+                    <td>
+                        <div class="flex gap-2">
+                            <a href="https://wa.me/91${lead.whatsapp}?text=Hello%20${encodeURIComponent(lead.name)},%20we%20received%20your%20CCTV%20inquiry%20for%20${lead.cameraCount}%20cameras.%20Let's%20discuss!" target="_blank" class="btn btn-success" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;"><i class="fab fa-whatsapp"></i></a>
+                            <button class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="deleteLead('b2c', '${lead.timestamp}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // B2B Modal Logic
+        const PRODUCT_NAMES = {
+            '2mp_dome_camera': '2MP Dome Camera (Basic)',
+            '2mp_bullet_camera': '2MP Bullet Camera (Basic)',
+            '2mp_colorvu_dome': '2MP ColorVu/Full Color Dome',
+            '2mp_colorvu_bullet': '2MP ColorVu/Full Color Bullet',
+            '4ch_dvr': '4 Channel DVR',
+            '8ch_dvr': '8 Channel DVR',
+            '4ch_nvr': '4 Channel NVR',
+            '8ch_nvr': '8 Channel NVR',
+            'ip_camera_2mp': '2MP IP Camera',
+            'wire_bundle_90m': '3+1 Wire Bundle (90m)',
+            'smps_4ch': 'Power Supply (SMPS) 4CH',
+            'hard_disk_1tb': '1TB Surveillance Hard Disk'
+        };
+
+        function openB2BModal(lead) {
+            currentModalLead = lead;
+            
+            // Populate Info
+            const infoDiv = document.getElementById('modal-lead-info');
+            infoDiv.innerHTML = `
+                <div>
+                    <p style="color:var(--text-muted); font-size:0.8rem;">Name / Shop</p>
+                    <p style="font-weight:600; font-size:1.1rem;">${lead.name} <span class="text-accent">@ ${lead.shopName || 'N/A'}</span></p>
+                    <p style="margin-top:0.5rem;"><i class="fas fa-phone text-muted"></i> ${lead.whatsapp}</p>
+                    <p><i class="fas fa-map-marker-alt text-muted"></i> ${lead.city} - ${lead.pincode}</p>
+                </div>
+                <div>
+                    <p style="color:var(--text-muted); font-size:0.8rem;">Business Profile</p>
+                    <p><strong>Role:</strong> ${lead.role}</p>
+                    <p><strong>Experience:</strong> ${lead.yearsInBusiness || '-'} Years</p>
+                    <p><strong>Installs/mo:</strong> ${lead.monthlyInstalls || '-'}</p>
+                    <p style="margin-top:0.5rem;"><strong>Wants Rate Card:</strong> ${lead.wantRateCard ? '✅ Yes' : '❌ No'} | <strong>Dealership:</strong> ${lead.wantDealership ? '✅ Yes' : '❌ No'}</p>
+                </div>
+            `;
+            
+            // Populate Prices
+            const tbody = document.getElementById('modal-price-tbody');
+            tbody.innerHTML = '';
+            
+            if(!lead.prices || Object.keys(lead.prices).length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5">No prices submitted by this lead.</td></tr>`;
+            } else {
+                Object.keys(lead.prices).forEach(key => {
+                    const theirPrice = Number(lead.prices[key]);
+                    // Auto-suggest a price slightly lower
+                    const suggestPrice = Math.floor(theirPrice * 0.9);
+                    const prodName = PRODUCT_NAMES[key] || key;
+                    const model = (lead.modelNumbers && lead.modelNumbers[key]) ? lead.modelNumbers[key] : '-';
+                    
+                    const tr = document.createElement('tr');
+                    tr.dataset.key = key;
+                    tr.dataset.name = prodName;
+                    tr.dataset.theirPrice = theirPrice;
+                    
+                    tr.innerHTML = `
+                        <td>${prodName}</td>
+                        <td style="font-size:0.85rem; color:var(--text-muted);">${model}</td>
+                        <td style="font-weight:600;">₹${theirPrice}</td>
+                        <td><input type="number" class="price-input offer-input" value="${suggestPrice}" oninput="recalcSavings()"></td>
+                        <td class="margin-cell" style="font-weight:600; color:var(--success);">₹${theirPrice - suggestPrice}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+            
+            document.getElementById('b2b-modal').classList.add('active');
+            recalcSavings();
+        }
+
+        function closeModal() {
+            document.getElementById('b2b-modal').classList.remove('active');
+            currentModalLead = null;
+        }
+
+        function recalcSavings() {
+            const rows = document.querySelectorAll('#modal-price-tbody tr[data-key]');
+            let total = 0;
+            rows.forEach(tr => {
+                const theirP = Number(tr.dataset.theirPrice);
+                const ourP = Number(tr.querySelector('.offer-input').value) || 0;
+                const savings = theirP - ourP;
+                
+                const marginCell = tr.querySelector('.margin-cell');
+                marginCell.innerText = `₹${savings}`;
+                marginCell.style.color = savings > 0 ? 'var(--success)' : (savings < 0 ? 'var(--danger)' : 'var(--text-main)');
+                
+                total += savings;
+            });
+            
+            const totalEl = document.getElementById('total-savings');
+            totalEl.innerText = `Total Potential Savings: ₹${total}`;
+            totalEl.style.color = total > 0 ? 'var(--success)' : 'var(--danger)';
+        }
+
+        function generateWhatsAppQuote() {
+            if(!currentModalLead) return;
+            
+            let msg = `Hello ${currentModalLead.name}! 👋\nThank you for checking your rates with SecureVision Wholesale.\n\nBased on your current prices, here are our DIRECT rates:\n\n`;
+            
+            const rows = document.querySelectorAll('#modal-price-tbody tr[data-key]');
+            let totalSavings = 0;
+            
+            rows.forEach(tr => {
+                const name = tr.dataset.name;
+                const theirP = Number(tr.dataset.theirPrice);
+                const ourP = Number(tr.querySelector('.offer-input').value) || 0;
+                const save = theirP - ourP;
+                totalSavings += save;
+                
+                msg += `🔹 *${name}*\nYour Price: ₹${theirP} → *Our Price: ₹${ourP}* (Save ₹${save})\n\n`;
+            });
+            
+            msg += `*Total Monthly Savings per Kit: ₹${totalSavings}+*\n\nOrder now & get FREE delivery! 🚚\nReply 'YES' to place your first order or view full catalogue.`;
+            
+            const encodedMsg = encodeURIComponent(msg);
+            const url = `https://wa.me/91${currentModalLead.whatsapp}?text=${encodedMsg}`;
+            window.open(url, '_blank');
+        }
+
+        // Data Management Functions
+        function deleteLead(type, timestamp) {
+            if(!confirm('Are you sure you want to delete this lead?')) return;
+            
+            if(type === 'b2b') {
+                b2bLeads = b2bLeads.filter(l => l.timestamp !== timestamp);
+                localStorage.setItem('b2b_leads', JSON.stringify(b2bLeads));
+                renderB2BTable();
+            } else {
+                b2cLeads = b2cLeads.filter(l => l.timestamp !== timestamp);
+                localStorage.setItem('b2c_leads', JSON.stringify(b2cLeads));
+                renderB2CTable();
+            }
+            updateStats();
+        }
+
+        function clearData(type) {
+            const typeName = type === 'b2b' ? 'B2B (Technicians)' : 'B2C (Customers)';
+            if(confirm(`⚠️ WARNING: Are you sure you want to delete ALL ${typeName} leads? This cannot be undone.`)) {
+                if(type === 'b2b') {
+                    localStorage.removeItem('b2b_leads');
+                } else {
+                    localStorage.removeItem('b2c_leads');
+                }
+                loadData();
+            }
+        }
+
+        function exportCSV(type) {
+            let data = type === 'b2b' ? b2bLeads : b2cLeads;
+            if(data.length === 0) {
+                alert('No data to export.');
+                return;
+            }
+            
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            if(type === 'b2b') {
+                csvContent += "Date,Name,Shop Name,Role,WhatsApp,City,Pincode,Years in Business,Monthly Installs,Brands,Products Priced\n";
+                data.forEach(lead => {
+                    const date = new Date(lead.timestamp).toLocaleDateString('en-IN');
+                    const brands = (lead.brands || []).join(';');
+                    const prodCount = lead.prices ? Object.keys(lead.prices).length : 0;
+                    
+                    const row = [
+                        date,
+                        `"${lead.name || ''}"`,
+                        `"${lead.shopName || ''}"`,
+                        `"${lead.role || ''}"`,
+                        lead.whatsapp,
+                        `"${lead.city || ''}"`,
+                        lead.pincode,
+                        lead.yearsInBusiness,
+                        lead.monthlyInstalls,
+                        `"${brands}"`,
+                        prodCount
+                    ].join(',');
+                    csvContent += row + "\n";
+                });
+            } else {
+                csvContent += "Date,Name,WhatsApp,Location,Type,Cameras,Storage Days,Pref Time,Est Cost Basic,Est Cost Premium\n";
+                data.forEach(lead => {
+                    const date = new Date(lead.timestamp).toLocaleDateString('en-IN');
+                    
+                    const row = [
+                        date,
+                        `"${lead.name || ''}"`,
+                        lead.whatsapp,
+                        `"${lead.location || ''}"`,
+                        `"${lead.locationType || ''}"`,
+                        lead.cameraCount,
+                        lead.storageDays,
+                        `"${lead.preferredTime || ''}"`,
+                        lead.estimatedBasicCost,
+                        lead.estimatedPremiumCost
+                    ].join(',');
+                    csvContent += row + "\n";
+                });
+            }
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `${type}_leads_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
