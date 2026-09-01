@@ -1,0 +1,9 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/b2b.html" },
+    { "source": "/b2b", "destination": "/b2b.html" },
+    { "source": "/b2c", "destination": "/b2c.html" },
+    { "source": "/admin", "destination": "/admin.html" }
+  ]
+}
