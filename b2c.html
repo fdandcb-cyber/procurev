@@ -963,6 +963,7 @@
         // Single Select Logic
         function setupSingleSelect(containerId, stateKey) {
             const container = document.getElementById(containerId);
+            if (!container) return;
             const cards = container.querySelectorAll('.select-card');
             cards.forEach(card => {
                 card.addEventListener('click', () => {
@@ -972,20 +973,23 @@
                 });
             });
         }
-        setupSingleSelect('locationType', 'location');
-        setupSingleSelect('storageDays', 'storage');
 
-        // Multi Select Logic
-        const featureCards = document.querySelectorAll('#features .select-card');
-        featureCards.forEach(card => {
-            card.addEventListener('click', () => {
-                card.classList.toggle('selected');
-                const val = card.dataset.val;
-                if (card.classList.contains('selected')) {
-                    if (!state.features.includes(val)) state.features.push(val);
-                } else {
-                    state.features = state.features.filter(f => f !== val);
-                }
+        document.addEventListener('DOMContentLoaded', () => {
+            setupSingleSelect('locationType', 'location');
+            setupSingleSelect('storageDays', 'storage');
+
+            // Multi Select Logic
+            const featureCards = document.querySelectorAll('#features .select-card');
+            featureCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('selected');
+                    const val = card.dataset.val;
+                    if (card.classList.contains('selected')) {
+                        if (!state.features.includes(val)) state.features.push(val);
+                    } else {
+                        state.features = state.features.filter(f => f !== val);
+                    }
+                });
             });
         });
 

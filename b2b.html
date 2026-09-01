@@ -1082,26 +1082,21 @@
 
         const productsContainer = document.getElementById('products-container');
         if (productsContainer) {
+            productsContainer.innerHTML = '';
             productsData.forEach((cat, index) => {
                 const accordion = document.createElement('div');
-                accordion.className = 'accordion';
+                // Open first two categories (Analog & IP Cameras) by default
+                accordion.className = 'accordion' + (index < 2 ? ' open' : '');
 
                 const header = document.createElement('div');
                 header.className = 'accordion-header';
-                header.innerHTML = `<span>${cat.category}</span> <span>+</span>`;
-                header.onclick = () => {
-                    const cont = header.nextElementSibling;
-                    const isOpen = cont.style.display === 'block';
-                    cont.style.display = isOpen ? 'none' : 'block';
-                    header.querySelector('span:last-child').innerText = isOpen ? '+' : '−';
+                header.innerHTML = `<span>${cat.category}</span>`;
+                header.onclick = function() {
+                    accordion.classList.toggle('open');
                 };
 
                 const content = document.createElement('div');
                 content.className = 'accordion-content';
-                if(index === 0) {
-                    content.style.display = 'block';
-                    header.querySelector('span:last-child').innerText = '−';
-                }
 
                 cat.items.forEach(item => {
                     const row = document.createElement('div');
@@ -1110,7 +1105,6 @@
                         <div class="product-name">${item}</div>
                         <div class="product-inputs">
                             <div class="price-input-wrapper">
-                                <span>₹</span>
                                 <input type="number" class="price-input p-input" data-product="${item}" placeholder="Price you pay">
                             </div>
                             <input type="text" class="model-input m-input" data-product="${item}" placeholder="Model (Opt)">

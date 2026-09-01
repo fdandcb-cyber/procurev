@@ -307,9 +307,10 @@
     <!-- Main Dashboard -->
     <div id="dashboard">
         <header class="header">
-            <div class="flex align-center gap-2">
+            <div class="flex align-center gap-2" style="flex-wrap: wrap;">
                 <i class="fas fa-shield-alt text-accent" style="font-size: 1.5rem;"></i>
                 <h2>Admin Dashboard</h2>
+                <span id="backend-status" class="tag" style="background: rgba(245, 158, 11, 0.15); color: var(--accent); font-size: 0.8rem; padding: 4px 8px; border-radius: 4px;">Connecting...</span>
             </div>
             <div class="flex gap-4 align-center">
                 <span style="color: var(--text-muted); font-size: 0.875rem;" id="current-time"></span>
@@ -656,6 +657,21 @@
                 localB2C = JSON.parse(localStorage.getItem('b2c_leads')) || [];
             } catch (e) {
                 console.error("Error reading localStorage", e);
+            }
+
+            const statusEl = document.getElementById('backend-status');
+            if (supabaseB2B !== null && supabaseB2C !== null) {
+                if (statusEl) {
+                    statusEl.innerText = "🟢 Supabase Cloud Active";
+                    statusEl.style.color = "var(--success)";
+                    statusEl.style.background = "rgba(16, 185, 129, 0.15)";
+                }
+            } else {
+                if (statusEl) {
+                    statusEl.innerText = "🟡 LocalStorage Mode (Supabase SQL Pending)";
+                    statusEl.style.color = "var(--accent)";
+                    statusEl.style.background = "rgba(245, 158, 11, 0.15)";
+                }
             }
 
             b2bLeads = supabaseB2B !== null ? supabaseB2B : localB2B;
