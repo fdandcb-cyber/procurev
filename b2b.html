@@ -862,6 +862,12 @@
         <div class="overlay-text" id="overlayText">Analyzing your current rates...</div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script>
+        const SUPABASE_URL = 'https://addlxslnsxlrgleennto.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkZGx4c2xuc3hscmdsZWVubnRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MTQ5NjIsImV4cCI6MjA5ODQ5MDk2Mn0.AM-KEAI-hxzNNi5ML-Lki-wCsHHje8RqGubZ0h8tjPE';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    </script>
     <script>
         // Banner Messages
         const bannerMsgs = [
@@ -1056,7 +1062,7 @@
         });
 
         // Submit form
-        function submitForm() {
+        async function submitForm() {
             // Validation
             const name = document.getElementById('fName').value.trim();
             const wa = document.getElementById('waNum').value.trim();
@@ -1114,13 +1120,30 @@
                 wantsDealer: document.getElementById('chkDealer').checked
             };
 
-            // Save to localStorage
-            let leads = JSON.parse(localStorage.getItem('b2b_leads') || '[]');
-            leads.push(leadData);
-            localStorage.setItem('b2b_leads', JSON.stringify(leads));
-            
-            let count = parseInt(localStorage.getItem('b2b_lead_count') || '0');
-            localStorage.setItem('b2b_lead_count', count + 1);
+            // Save to Supabase
+            const { error } = await supabase.from('b2b_leads').insert({
+                name: name,
+                shop_name: leadData.shopName,
+                role: selectedRole,
+                years_in_business: leadData.yearsInBusiness,
+                brands: selectedBrands,
+                monthly_installs: leadData.monthlyInstalls,
+                prices: prices,
+                model_numbers: models,
+                whatsapp: "+91" + wa,
+                city: city,
+                pincode: leadData.pincode,
+                email: leadData.email,
+                want_rate_card: leadData.wantsRateCard,
+                want_dealership: leadData.wantsDealer
+            });
+            if (error) {
+                console.error('Supabase error:', error);
+                // Fallback to localStorage
+                let leads = JSON.parse(localStorage.getItem('b2b_leads') || '[]');
+                leads.push(leadData);
+                localStorage.setItem('b2b_leads', JSON.stringify(leads));
+            }
 
             // Show Overlay overlay
             document.getElementById('overlay').style.display = 'flex';

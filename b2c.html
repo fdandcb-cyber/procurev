@@ -900,9 +900,12 @@
         </div>
     </footer>
 
-
-
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script>
+        const SUPABASE_URL = 'https://addlxslnsxlrgleennto.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkZGx4c2xuc3hscmdsZWVubnRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MTQ5NjIsImV4cCI6MjA5ODQ5MDk2Mn0.AM-KEAI-hxzNNi5ML-Lki-wCsHHje8RqGubZ0h8tjPE';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    </script>
     <script>
         // Banner Rotation
         const banners = document.querySelectorAll('.banner-text');
@@ -1114,7 +1117,27 @@
             }, 2000);
         }
 
-        function saveLeadData(data) {
+        async function saveLeadData(data) {
+            try {
+                if (typeof supabase !== 'undefined') {
+                    const { error } = await supabase.from('b2c_leads').insert({
+                        name: data.name,
+                        whatsapp: data.whatsapp,
+                        location: data.location,
+                        location_type: data.locationType,
+                        camera_count: data.cameraCount,
+                        features: data.features,
+                        storage_days: data.storageDays,
+                        preferred_time: data.preferredTime,
+                        specific_requirements: document.getElementById('custReq') ? document.getElementById('custReq').value : '',
+                        estimated_basic_cost: data.estimatedBasicCost,
+                        estimated_premium_cost: data.estimatedPremiumCost
+                    });
+                    if (error) console.error('Supabase b2c insert error:', error);
+                }
+            } catch (err) {
+                console.error('Supabase exception:', err);
+            }
             try {
                 let leads = JSON.parse(localStorage.getItem('b2c_leads') || '[]');
                 leads.push(data);
@@ -1123,7 +1146,7 @@
                 let count = parseInt(localStorage.getItem('b2c_lead_count') || '0');
                 localStorage.setItem('b2c_lead_count', count + 1);
             } catch (e) {
-                console.error('Error saving lead data', e);
+                console.error('Error saving lead data to localStorage', e);
             }
         }
     </script>
