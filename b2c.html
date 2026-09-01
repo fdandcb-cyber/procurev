@@ -904,7 +904,20 @@
     <script>
         const SUPABASE_URL = 'https://addlxslnsxlrgleennto.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkZGx4c2xuc3hscmdsZWVubnRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MTQ5NjIsImV4cCI6MjA5ODQ5MDk2Mn0.AM-KEAI-hxzNNi5ML-Lki-wCsHHje8RqGubZ0h8tjPE';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        let _supabaseB2C = null;
+        function getSupabase() {
+            if (!_supabaseB2C && typeof window !== 'undefined') {
+                try {
+                    if (window.supabase && typeof window.supabase.createClient === 'function') {
+                        _supabaseB2C = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                    }
+                } catch(e) {
+                    console.warn('Supabase init warning:', e);
+                }
+            }
+            return _supabaseB2C;
+        }
     </script>
     <script>
         // Banner Rotation
@@ -1119,8 +1132,9 @@
 
         async function saveLeadData(data) {
             try {
-                if (typeof supabase !== 'undefined') {
-                    const { error } = await supabase.from('b2c_leads').insert({
+                const client = getSupabase();
+                if (client) {
+                    client.from('b2c_leads').insert({
                         name: data.name,
                         whatsapp: data.whatsapp,
                         location: data.location,
@@ -1132,11 +1146,14 @@
                         specific_requirements: document.getElementById('custReq') ? document.getElementById('custReq').value : '',
                         estimated_basic_cost: data.estimatedBasicCost,
                         estimated_premium_cost: data.estimatedPremiumCost
+                    }).then(({ error }) => {
+                        if (error) console.warn('Supabase b2c insert note:', error);
+                    }).catch(err => {
+                        console.warn('Supabase b2c catch note:', err);
                     });
-                    if (error) console.error('Supabase b2c insert error:', error);
                 }
             } catch (err) {
-                console.error('Supabase exception:', err);
+                console.warn('Supabase exception note:', err);
             }
             try {
                 let leads = JSON.parse(localStorage.getItem('b2c_leads') || '[]');

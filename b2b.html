@@ -945,137 +945,232 @@
         }
 
         // Step 1: Roles
-        let selectedRole = "";
-        document.querySelectorAll('.role-card').forEach(card => {
-            card.addEventListener('click', function() {
-                document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
-                this.classList.add('selected');
-                selectedRole = this.getAttribute('data-val');
+        let selectedRole = "CCTV Installer";
+        let selectedBrands = ["CP Plus", "Hikvision"];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Role selection
+            document.querySelectorAll('.role-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedRole = this.getAttribute('data-val') || this.innerText.trim();
+                });
+            });
+
+            // Default select CCTV Installer
+            const defaultRoleCard = document.querySelector('.role-card[data-val="CCTV Installer"]') || document.querySelector('.role-card');
+            if (defaultRoleCard) {
+                defaultRoleCard.classList.add('selected');
+                selectedRole = defaultRoleCard.getAttribute('data-val') || "CCTV Installer";
+            }
+
+            // Brand selection
+            document.querySelectorAll('.brand-chip').forEach(chip => {
+                const brand = chip.innerText.trim();
+                // Default pre-select top brands
+                if (brand === 'CP Plus' || brand === 'Hikvision') {
+                    chip.classList.add('selected');
+                }
+
+                chip.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const b = this.innerText.trim();
+                    if (this.classList.contains('selected')) {
+                        if (!selectedBrands.includes(b)) selectedBrands.push(b);
+                    } else {
+                        selectedBrands = selectedBrands.filter(item => item !== b);
+                    }
+
+                    if (b === 'Other') {
+                        const oInput = document.getElementById('otherBrandInput');
+                        if (oInput) oInput.style.display = this.classList.contains('selected') ? 'block' : 'none';
+                    }
+                });
             });
         });
 
-        // Step 2: Brands
-        let selectedBrands = [];
-        document.querySelectorAll('.brand-chip').forEach(chip => {
-            chip.addEventListener('click', function() {
-                this.classList.toggle('selected');
-                let brand = this.innerText;
-                
-                if (brand === 'Other') {
-                    const otherInput = document.getElementById('otherBrandInput');
-                    otherInput.style.display = this.classList.contains('selected') ? 'block' : 'none';
-                }
-
-                if (this.classList.contains('selected')) {
-                    selectedBrands.push(brand);
-                } else {
-                    selectedBrands = selectedBrands.filter(b => b !== brand);
-                }
-            });
-        });
-
-        // Step 3: Products Data
-        const productCategories = [
+        // Generate Products List (Accordion)
+        const productsData = [
             {
-                name: "📹 Analog / HD Cameras",
-                items: ["2MP Dome Camera (Indoor)", "2MP Bullet Camera (Outdoor)", "2MP Audio Dome Camera", "2MP Color Night Vision (ColorVu) Camera", "5MP Dome Camera", "5MP Bullet Camera"]
+                category: "📹 Analog / HD Cameras",
+                items: [
+                    "2MP Dome Camera (Indoor)",
+                    "2MP Bullet Camera (Outdoor)",
+                    "2MP Audio Dome Camera",
+                    "2MP Color Night Vision (ColorVu)",
+                    "5MP Dome Camera",
+                    "5MP Bullet Camera"
+                ]
             },
             {
-                name: "🌐 IP / Network Cameras",
-                items: ["2MP IP Dome Camera (PoE)", "2MP IP Bullet Camera (PoE)", "4MP IP Dome Camera", "4MP IP Bullet Camera", "4MP Varifocal Camera", "PTZ Camera (2MP/4MP)"]
+                category: "🌐 IP / Network Cameras",
+                items: [
+                    "2MP IP Dome Camera (PoE)",
+                    "2MP IP Bullet Camera (PoE)",
+                    "4MP IP Dome Camera",
+                    "4MP IP Bullet Camera",
+                    "4MP Varifocal Camera",
+                    "PTZ Camera (2MP/4MP)"
+                ]
             },
             {
-                name: "📶 WiFi / Smart Cameras",
-                items: ["2MP WiFi Pan-Tilt Camera (360°)", "3MP WiFi Pan-Tilt Camera", "4MP WiFi Camera", "4G SIM Camera (Solar/Battery)"]
+                category: "📶 WiFi / Smart Cameras",
+                items: [
+                    "2MP WiFi Pan-Tilt Camera (360°)",
+                    "3MP WiFi Pan-Tilt Camera",
+                    "4MP WiFi Camera",
+                    "4G SIM Camera (Solar/Battery)"
+                ]
             },
             {
-                name: "📼 Recorders (DVR/NVR)",
-                items: ["4 Channel DVR", "8 Channel DVR", "16 Channel DVR", "4 Channel NVR", "8 Channel NVR", "16 Channel NVR", "32 Channel NVR"]
+                category: "📼 Recorders (DVR/NVR)",
+                items: [
+                    "4 Channel DVR",
+                    "8 Channel DVR",
+                    "16 Channel DVR",
+                    "4 Channel NVR",
+                    "8 Channel NVR",
+                    "16 Channel NVR",
+                    "32 Channel NVR"
+                ]
             },
             {
-                name: "💾 Surveillance Hard Drives",
-                items: ["500GB HDD (Refurbished)", "1TB Surveillance HDD", "2TB Surveillance HDD", "4TB Surveillance HDD (WD Purple / Seagate SkyHawk)", "6TB Surveillance HDD", "8TB Surveillance HDD"]
+                category: "💾 Surveillance Hard Drives",
+                items: [
+                    "500GB HDD (Refurbished/Pull)",
+                    "1TB Surveillance HDD",
+                    "2TB Surveillance HDD",
+                    "4TB Surveillance HDD (WD Purple / SkyHawk)",
+                    "6TB Surveillance HDD",
+                    "8TB Surveillance HDD"
+                ]
             },
             {
-                name: "⚡ Power Supply & Accessories",
-                items: ["4 Channel SMPS Power Supply", "8 Channel SMPS Power Supply", "16 Channel SMPS Power Supply", "Single Camera 12V 1A Adapter", "4+2 Port PoE Switch", "8+2 Port PoE Switch", "16+2 Port PoE Switch"]
+                category: "⚡ Power Supply & Accessories",
+                items: [
+                    "4 Channel SMPS Power Supply",
+                    "8 Channel SMPS Power Supply",
+                    "16 Channel SMPS Power Supply",
+                    "Single Camera 12V 1A Adapter",
+                    "4+2 Port PoE Switch",
+                    "8+2 Port PoE Switch",
+                    "16+2 Port PoE Switch"
+                ]
             },
             {
-                name: "🔌 Cables & Connectors",
-                items: ["3+1 Copper Cable Coil (90m)", "3+1 Copper Cable Coil (180m)", "Cat6 Cable Spool (305m)", "BNC + DC Connector Set (per pair)", "RJ45 Connectors (Pack of 100)"]
+                category: "🔌 Cables & Connectors",
+                items: [
+                    "3+1 Copper Cable Coil (90m)",
+                    "3+1 Copper Cable Coil (180m)",
+                    "Cat6 Cable Spool (305m)",
+                    "BNC + DC Connector Set (per pair)",
+                    "RJ45 Connectors (Pack of 100)"
+                ]
             },
             {
-                name: "📡 Networking",
-                items: ["4G SIM Router (Single Antenna)", "4G SIM Router (Dual Antenna)", "WiFi Router (Basic)", "Network Switch (Unmanaged 5-port)", "Network Switch (Unmanaged 8-port)"]
+                category: "📡 Networking",
+                items: [
+                    "4G SIM Router (Single Antenna)",
+                    "4G SIM Router (Dual Antenna)",
+                    "WiFi Router (Basic)",
+                    "Network Switch (5-Port Unmanaged)",
+                    "Network Switch (8-Port Unmanaged)"
+                ]
             }
         ];
 
         const productsContainer = document.getElementById('products-container');
-        
-        productCategories.forEach((cat, index) => {
-            let accordion = document.createElement('div');
-            accordion.className = 'accordion';
-            if (index === 0) accordion.classList.add('open');
+        if (productsContainer) {
+            productsData.forEach((cat, index) => {
+                const accordion = document.createElement('div');
+                accordion.className = 'accordion';
 
-            let header = document.createElement('div');
-            header.className = 'accordion-header';
-            header.innerText = cat.name;
-            header.onclick = function() {
-                this.parentElement.classList.toggle('open');
-            };
+                const header = document.createElement('div');
+                header.className = 'accordion-header';
+                header.innerHTML = `<span>${cat.category}</span> <span>+</span>`;
+                header.onclick = () => {
+                    const cont = header.nextElementSibling;
+                    const isOpen = cont.style.display === 'block';
+                    cont.style.display = isOpen ? 'none' : 'block';
+                    header.querySelector('span:last-child').innerText = isOpen ? '+' : '−';
+                };
 
-            let content = document.createElement('div');
-            content.className = 'accordion-content';
+                const content = document.createElement('div');
+                content.className = 'accordion-content';
+                if(index === 0) {
+                    content.style.display = 'block';
+                    header.querySelector('span:last-child').innerText = '−';
+                }
 
-            cat.items.forEach(item => {
-                let row = document.createElement('div');
-                row.className = 'product-row';
-                
-                row.innerHTML = `
-                    <div class="product-name">${item}</div>
-                    <div class="price-input-wrapper">
-                        <input type="number" class="price-input p-input" data-product="${item}" placeholder="Price">
-                    </div>
-                    <div>
-                        <input type="text" class="model-input m-input" data-product="${item}" placeholder="Model (Opt)">
-                    </div>
-                `;
-                content.appendChild(row);
+                cat.items.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = 'product-row';
+                    row.innerHTML = `
+                        <div class="product-name">${item}</div>
+                        <div class="product-inputs">
+                            <div class="price-input-wrapper">
+                                <span>₹</span>
+                                <input type="number" class="price-input p-input" data-product="${item}" placeholder="Price you pay">
+                            </div>
+                            <input type="text" class="model-input m-input" data-product="${item}" placeholder="Model (Opt)">
+                        </div>
+                    `;
+                    content.appendChild(row);
+                });
+
+                accordion.appendChild(header);
+                accordion.appendChild(content);
+                productsContainer.appendChild(accordion);
             });
-
-            accordion.appendChild(header);
-            accordion.appendChild(content);
-            productsContainer.appendChild(accordion);
-        });
+        }
 
         // Price counter logic
         let filledPrices = 0;
         document.addEventListener('input', function(e) {
-            if(e.target.classList.contains('p-input')) {
+            if(e.target && e.target.classList && e.target.classList.contains('p-input')) {
                 let count = 0;
                 document.querySelectorAll('.p-input').forEach(inp => {
                     if(inp.value.trim() !== '') count++;
                 });
                 filledPrices = count;
-                document.getElementById('priceCounter').innerText = `You've entered prices for ${count} products`;
+                const counterEl = document.getElementById('priceCounter');
+                if (counterEl) counterEl.innerText = `You've entered prices for ${count} products`;
             }
         });
 
         // Submit form
         async function submitForm() {
             // Validation
-            const name = document.getElementById('fName').value.trim();
-            const wa = document.getElementById('waNum').value.trim();
-            const city = document.getElementById('city').value.trim();
+            const nameEl = document.getElementById('fName');
+            const waEl = document.getElementById('waNum');
+            const cityEl = document.getElementById('city');
             
-            if(!name || !wa || !city) {
-                alert("Please fill required fields (Name, WhatsApp, City).");
+            const name = (nameEl ? nameEl.value : '').trim();
+            const wa = (waEl ? waEl.value : '').trim();
+            const city = (cityEl ? cityEl.value : '').trim();
+            
+            if(!name) {
+                alert("Please enter your Full Name.");
+                if (nameEl) nameEl.focus();
                 return;
             }
-            if(wa.length < 10) {
+            if(!wa || wa.length < 10) {
                 alert("Please enter a valid 10-digit WhatsApp number.");
+                if (waEl) waEl.focus();
                 return;
             }
+            if(!city) {
+                alert("Please enter your City / District.");
+                if (cityEl) cityEl.focus();
+                return;
+            }
+
+            // Immediately show the analyzing overlay for instant feedback
+            const overlay = document.getElementById('overlay');
+            const oText = document.getElementById('overlayText');
+            if (overlay) overlay.style.display = 'flex';
+            if (oText) oText.innerText = "Analyzing your current purchase rates...";
 
             // Gather Data
             const prices = {};
@@ -1083,113 +1178,136 @@
             let totalAmount = 0;
 
             document.querySelectorAll('.p-input').forEach(inp => {
-                if (inp.value.trim() !== '') {
-                    prices[inp.getAttribute('data-product')] = inp.value;
+                if (inp.value && inp.value.trim() !== '') {
+                    const pKey = inp.getAttribute('data-product');
+                    prices[pKey] = inp.value.trim();
                     totalAmount += parseFloat(inp.value) || 0;
                 }
             });
 
             document.querySelectorAll('.m-input').forEach(inp => {
-                if (inp.value.trim() !== '') {
-                    models[inp.getAttribute('data-product')] = inp.value;
+                if (inp.value && inp.value.trim() !== '') {
+                    models[inp.getAttribute('data-product')] = inp.value.trim();
                 }
             });
 
             if (selectedBrands.includes("Other")) {
-                let ob = document.getElementById('otherBrandInput').value.trim();
-                if(ob) {
+                const otherEl = document.getElementById('otherBrandInput');
+                let ob = otherEl ? otherEl.value.trim() : '';
+                if (ob) {
                     selectedBrands[selectedBrands.indexOf("Other")] = "Other: " + ob;
                 }
             }
 
+            const shopName = document.getElementById('shopName') ? document.getElementById('shopName').value.trim() : '';
+            const pincode = document.getElementById('pincode') ? document.getElementById('pincode').value.trim() : '';
+            const email = document.getElementById('email') ? document.getElementById('email').value.trim() : '';
+            const yearsBiz = document.getElementById('yearsBiz') ? document.getElementById('yearsBiz').value : '';
+            const monthlyVol = document.getElementById('monthlyVolume') ? document.getElementById('monthlyVolume').value : '';
+            const wantRateCard = document.getElementById('chkRateCard') ? document.getElementById('chkRateCard').checked : true;
+            const wantDealer = document.getElementById('chkDealer') ? document.getElementById('chkDealer').checked : false;
+
             const leadData = {
                 timestamp: new Date().toISOString(),
                 role: selectedRole,
-                yearsInBusiness: document.getElementById('yearsBiz').value,
+                yearsInBusiness: yearsBiz,
                 brands: selectedBrands,
-                monthlyInstalls: document.getElementById('monthlyVolume').value,
+                monthlyInstalls: monthlyVol,
                 prices: prices,
                 models: models,
                 name: name,
-                shopName: document.getElementById('shopName').value.trim(),
+                shopName: shopName,
                 whatsapp: "+91" + wa,
                 city: city,
-                pincode: document.getElementById('pincode').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                wantsRateCard: document.getElementById('chkRateCard').checked,
-                wantsDealer: document.getElementById('chkDealer').checked
+                pincode: pincode,
+                email: email,
+                wantsRateCard: wantRateCard,
+                wantsDealer: wantDealer
             };
 
-            // Save to Supabase
-            const { error } = await supabase.from('b2b_leads').insert({
-                name: name,
-                shop_name: leadData.shopName,
-                role: selectedRole,
-                years_in_business: leadData.yearsInBusiness,
-                brands: selectedBrands,
-                monthly_installs: leadData.monthlyInstalls,
-                prices: prices,
-                model_numbers: models,
-                whatsapp: "+91" + wa,
-                city: city,
-                pincode: leadData.pincode,
-                email: leadData.email,
-                want_rate_card: leadData.wantsRateCard,
-                want_dealership: leadData.wantsDealer
-            });
-            if (error) {
-                console.error('Supabase error:', error);
-                // Fallback to localStorage
+            // Save to LocalStorage immediately as backup
+            try {
                 let leads = JSON.parse(localStorage.getItem('b2b_leads') || '[]');
                 leads.push(leadData);
                 localStorage.setItem('b2b_leads', JSON.stringify(leads));
+                let count = parseInt(localStorage.getItem('b2b_lead_count') || '0');
+                localStorage.setItem('b2b_lead_count', count + 1);
+            } catch(e) {
+                console.error('LocalStorage write note:', e);
             }
 
-            // Show Overlay overlay
-            document.getElementById('overlay').style.display = 'flex';
-            const oText = document.getElementById('overlayText');
-            
+            // Save to Supabase in background (resilient try/catch)
+            try {
+                const client = getSupabase();
+                if (client) {
+                    client.from('b2b_leads').insert({
+                        name: name,
+                        shop_name: shopName,
+                        role: selectedRole,
+                        years_in_business: yearsBiz,
+                        brands: selectedBrands,
+                        monthly_installs: monthlyVol,
+                        prices: prices,
+                        model_numbers: models,
+                        whatsapp: "+91" + wa,
+                        city: city,
+                        pincode: pincode,
+                        email: email,
+                        want_rate_card: wantRateCard,
+                        want_dealership: wantDealer
+                    }).then(({ error }) => {
+                        if (error) console.warn('Supabase b2b insert response note:', error);
+                    }).catch(err => {
+                        console.warn('Supabase b2b insert catch note:', err);
+                    });
+                }
+            } catch(err) {
+                console.warn('Supabase background dispatch note:', err);
+            }
+
+            // Step through overlay messages smoothly
             const msgs = [
-                "Comparing with 50+ distributors...",
-                "Calculating your potential savings...",
-                "Preparing your personalized rate card..."
+                "Comparing with 50+ wholesale distributors...",
+                "Calculating your potential margin gap...",
+                "Generating your personalized wholesale rate card..."
             ];
-            
             let omIdx = 0;
             let oInt = setInterval(() => {
-                if (omIdx < msgs.length) {
+                if (oText && omIdx < msgs.length) {
                     oText.innerText = msgs[omIdx];
                     omIdx++;
                 }
-            }, 1000);
+            }, 500);
 
-            // Calc savings (10-20% of total inputted for show)
+            // Calc savings estimate (10-20% margin difference)
             let baseVal = totalAmount > 0 ? totalAmount : 25000;
-            let savingMin = Math.floor(baseVal * 0.10);
-            let savingMax = Math.floor(baseVal * 0.20);
+            let savingMin = Math.floor(baseVal * 0.12);
+            let savingMax = Math.floor(baseVal * 0.22);
             if(totalAmount === 0) {
-                 savingMin = 5000;
-                 savingMax = 12000;
+                savingMin = 5000;
+                savingMax = 12000;
             }
 
             setTimeout(() => {
                 clearInterval(oInt);
-                document.getElementById('overlay').style.display = 'none';
+                if (overlay) overlay.style.display = 'none';
                 
-                document.getElementById('form-content').style.display = 'none';
-                document.getElementById('success-screen').style.display = 'block';
+                const formContent = document.getElementById('form-content');
+                const successScreen = document.getElementById('success-screen');
+                if (formContent) formContent.style.display = 'none';
+                if (successScreen) successScreen.style.display = 'block';
                 
-                // Animate number
-                let targetMin = savingMin;
-                let targetMax = savingMax;
-                document.getElementById('savingsAmount').innerText = `₹${targetMin.toLocaleString()} - ₹${targetMax.toLocaleString()}`;
+                const savingsEl = document.getElementById('savingsAmount');
+                if (savingsEl) {
+                    savingsEl.innerText = `₹${savingMin.toLocaleString('en-IN')} - ₹${savingMax.toLocaleString('en-IN')}`;
+                }
                 
-                // Scroll to top of wizard
-                document.getElementById('form-wizard').scrollIntoView({behavior: 'smooth', block: 'center'});
-                
-            }, 4000);
+                const wizard = document.getElementById('form-wizard');
+                if (wizard) {
+                    wizard.scrollIntoView({behavior: 'smooth', block: 'start'});
+                }
+            }, 1600);
         }
-
     </script>
 </body>
 </html>
