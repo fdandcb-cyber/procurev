@@ -2,904 +2,1129 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional CCTV Installation & Security Solutions</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Smart CCTV Security Solutions | Complete Home & Shop Installation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0a0f1a;
+            --bg-dark: #070b14;
+            --bg-card: #0f172a;
+            --bg-card-hover: #162036;
+            --bg-input: #090d16;
+            --border-color: #1e293b;
+            --border-highlight: #334155;
+            
             --emerald: #10b981;
-            --cyan: #06b6d4;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --emerald-hover: #059669;
+            --emerald-light: rgba(16, 185, 129, 0.12);
+            
+            --cyan: #0ea5e9;
+            --cyan-light: rgba(14, 165, 233, 0.12);
+            
+            --amber: #f59e0b;
+            --amber-light: rgba(245, 158, 11, 0.12);
+            
+            --red: #ef4444;
+            --red-light: rgba(239, 68, 68, 0.12);
+            
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            --text-sub: #64748b;
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-dark);
             color: var(--text-main);
+            line-height: 1.5;
+            font-size: 15px;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.05) 0%, transparent 40%);
+            background-attachment: fixed;
         }
 
-        /* Top Banner */
+        /* Top Announcement Flashing Banner */
         .top-banner {
-            background: linear-gradient(90deg, var(--emerald), var(--cyan));
-            color: #fff;
+            background: linear-gradient(90deg, #047857, #0d9488, #0284c7, #6366f1);
+            background-size: 300% 300%;
+            animation: gradientShift 8s ease infinite;
+            color: #ffffff;
+            padding: 10px 16px;
             text-align: center;
-            padding: 10px 20px;
-            font-weight: 500;
-            font-size: 0.9rem;
+            font-weight: 700;
+            font-size: 0.85rem;
             position: sticky;
             top: 0;
             z-index: 100;
-            height: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-        }
-        
-        .banner-text {
-            position: absolute;
-            width: 100%;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
+            gap: 8px;
         }
 
-        .banner-text.active {
-            opacity: 1;
-            transform: translateY(0);
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .banner-text.exit {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-
-        /* Glassmorphism utility */
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-        }
-
-        /* Button utility */
-        .btn {
-            display: inline-block;
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: none;
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(90deg, var(--emerald), var(--cyan));
-            color: white;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 1px solid var(--glass-border);
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Layout */
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        section {
-            padding: 80px 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            background: linear-gradient(90deg, #fff, var(--text-muted));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            padding: 24px 16px 80px;
         }
 
         /* Hero */
         .hero {
-            padding: 100px 0 60px;
             text-align: center;
+            padding: 28px 0 32px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--emerald-light);
+            color: var(--emerald);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 16px;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 1.95rem;
             font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 20px;
-            background: linear-gradient(to right, #fff, var(--cyan), var(--emerald));
+            line-height: 1.25;
+            margin-bottom: 14px;
+            color: #ffffff;
+        }
+
+        @media (min-width: 640px) {
+            .hero h1 { font-size: 2.5rem; }
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #34d399, #38bdf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 700px;
-            margin: 0 auto 40px;
-            line-height: 1.6;
-        }
-
-        .trust-badges {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 40px;
-        }
-
-        .badge {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--emerald);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
+        .hero-sub {
+            color: #cbd5e1;
+            font-size: 1.05rem;
+            max-width: 680px;
+            margin: 0 auto 18px;
             font-weight: 500;
-            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
-        .hero-btns {
+        .hero-sub strong {
+            color: var(--amber);
+        }
+
+        /* Cost Breakdown Pill */
+        .per-day-banner {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(16, 185, 129, 0.12));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 30px;
+            padding: 8px 18px;
+            margin-bottom: 24px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .per-day-banner span.tag-cost {
+            background: var(--amber);
+            color: #000;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 800;
+        }
+
+        /* Value Pillars */
+        .perks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .perk-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 14px;
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            text-align: left;
         }
 
-        /* Grid System */
-        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
-        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
-
-        /* Why CCTV */
-        .feature-card {
-            padding: 30px;
-            transition: transform 0.3s ease;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
+        .perk-card .p-icon {
+            font-size: 1.4rem;
         }
 
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+        .perk-card strong {
+            display: block;
+            color: #f8fafc;
+            font-size: 0.88rem;
         }
 
-        .feature-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: #fff;
-        }
-
-        .feature-card p {
+        .perk-card span {
             color: var(--text-muted);
-            line-height: 1.5;
-            font-size: 0.95rem;
+            font-size: 0.78rem;
         }
 
-        /* How it Works */
-        .step-card {
-            text-align: center;
-            padding: 40px 20px;
+        /* Wizard Card */
+        .wizard-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 24px 18px;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);
             position: relative;
         }
 
-        .step-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.2));
+        @media (min-width: 640px) {
+            .wizard-card { padding: 36px 30px; }
+        }
+
+        /* Steps Stepper Header */
+        .steps-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .steps-header::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            right: 10px;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .step-bubble {
+            position: relative;
+            z-index: 2;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
+            background: var(--bg-dark);
+            border: 2px solid var(--border-color);
+            color: var(--text-muted);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 2rem;
-            border: 1px solid rgba(255,255,255,0.1);
+            font-weight: 800;
+            font-size: 0.88rem;
+            transition: all 0.3s;
         }
 
-        /* Estimator Wizard */
-        .estimator-section {
-            position: relative;
-        }
-        
-        .wizard-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px;
-            position: relative;
-            overflow: hidden;
+        .step-bubble.active {
+            border-color: var(--emerald);
+            background: var(--emerald);
+            color: #000;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: var(--glass-border);
-            border-radius: 3px;
-            margin-bottom: 30px;
-            overflow: hidden;
+        .step-bubble.completed {
+            border-color: var(--cyan);
+            background: var(--cyan);
+            color: #fff;
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--emerald), var(--cyan));
-            width: 20%;
-            transition: width 0.4s ease;
-        }
-
-        .step-indicator {
-            text-align: center;
-            color: var(--emerald);
-            font-weight: 600;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-        }
-
-        .wizard-step {
+        /* Wizard Step Content */
+        .wizard-pane {
             display: none;
-            animation: fadeIn 0.4s ease;
+            animation: fadeIn 0.3s ease;
         }
 
-        .wizard-step.active {
+        .wizard-pane.active {
             display: block;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .step-title {
-            font-size: 1.8rem;
-            margin-bottom: 30px;
-            text-align: center;
+        .pane-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            color: #ffffff;
         }
 
-        /* Selectable Cards (Radio/Checkbox) */
-        .selectable-grid {
+        .pane-sub {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 22px;
+        }
+
+        /* Cards Grid */
+        .select-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
         }
 
-        .select-card {
-            padding: 20px;
-            cursor: pointer;
+        @media (min-width: 640px) {
+            .select-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .option-card {
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 12px;
             text-align: center;
-            transition: all 0.2s ease;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
         }
 
-        .select-card:hover {
-            background: rgba(255,255,255,0.1);
+        .option-card:hover {
+            border-color: var(--border-highlight);
+            background: #1e293b;
         }
 
-        .select-card.selected {
+        .option-card.selected {
             border-color: var(--emerald);
-            background: rgba(16, 185, 129, 0.1);
+            background: var(--emerald-light);
             box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
         }
 
-        .select-card .icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            display: block;
+        .option-card.selected .card-title {
+            color: var(--emerald);
+            font-weight: 700;
         }
 
-        /* Counter */
-        .counter-wrapper {
+        .card-icon {
+            font-size: 1.8rem;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .card-tag {
+            font-size: 0.72rem;
+            color: var(--text-sub);
+        }
+
+        /* Camera Counter Box */
+        .camera-select-box {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .camera-counter-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .count-btn-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .counter-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
             transition: all 0.2s;
         }
 
-        .counter-btn:hover { background: rgba(255,255,255,0.1); }
-        .counter-value { font-size: 3rem; font-weight: 700; width: 80px; text-align: center; }
-
-        .quick-chips {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .chip {
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            cursor: pointer;
-            color: var(--text-muted);
-            transition: all 0.2s;
-        }
-
-        .chip:hover, .chip.active {
-            background: var(--emerald);
-            color: white;
+        .btn-circle:hover {
             border-color: var(--emerald);
+            color: var(--emerald);
         }
 
-        /* Forms */
-        .form-group {
-            margin-bottom: 20px;
+        .cam-display-num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--emerald);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .preset-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .preset-chip {
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preset-chip.active {
+            background: var(--emerald-light);
+            border-color: var(--emerald);
+            color: var(--emerald);
+            font-weight: 700;
+        }
+
+        /* Package Comparison Cards (Step 2) */
+        .packages-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        @media (min-width: 640px) {
+            .packages-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .package-card {
+            background: var(--bg-card-hover);
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px 16px;
+            cursor: pointer;
+            transition: all 0.25s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .package-card:hover {
+            border-color: var(--border-highlight);
+            transform: translateY(-2px);
+        }
+
+        .package-card.selected {
+            border-color: var(--emerald);
+            background: rgba(16, 185, 129, 0.08);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+        }
+
+        .popular-tag {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            color: #000;
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 3px 12px;
+            border-radius: 12px;
+            letter-spacing: 0.4px;
+        }
+
+        .pkg-name {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .pkg-brand {
+            font-size: 0.8rem;
+            color: var(--cyan);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .pkg-price-row {
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pkg-daily-rate {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--emerald);
+        }
+
+        .pkg-daily-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .pkg-features {
+            list-style: none;
+            font-size: 0.82rem;
+            color: #cbd5e1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
             text-align: left;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 14px 16px;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            color: white;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--emerald);
-        }
-
-        .wizard-footer {
+        .pkg-features li {
             display: flex;
-            justify-content: space-between;
-            margin-top: 40px;
+            align-items: center;
+            gap: 6px;
         }
 
-        .tip-box {
-            background: rgba(6, 182, 212, 0.1);
-            border-left: 4px solid var(--cyan);
-            padding: 15px;
-            border-radius: 4px;
+        .pkg-features li i {
+            color: var(--emerald);
             font-size: 0.9rem;
+        }
+
+        .pkg-warranty-badge {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #cbd5e1;
+            text-align: center;
+        }
+
+        /* Urgency / Intent Options (Step 3) */
+        .urgency-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        @media (min-width: 640px) {
+            .urgency-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .urgency-card {
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .urgency-card:hover {
+            border-color: var(--border-highlight);
+        }
+
+        .urgency-card.selected {
+            border-color: var(--amber);
+            background: var(--amber-light);
+        }
+
+        .urgency-icon {
+            font-size: 1.8rem;
+        }
+
+        .urgency-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .urgency-desc {
+            font-size: 0.78rem;
             color: var(--text-muted);
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 14px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: var(--emerald);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        }
+
+        /* Action Buttons */
+        .wizard-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-prev {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-prev:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, var(--emerald), var(--emerald-hover));
+            color: #ffffff;
+            border: none;
+            padding: 13px 26px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-next:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+        }
+
+        /* Success & Estimate Screen */
+        #estimateResultScreen {
+            display: none;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .estimate-badge {
+            width: 70px;
+            height: 70px;
+            background: var(--emerald-light);
+            border: 2px solid var(--emerald);
+            color: var(--emerald);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 14px;
+        }
+
+        .quote-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(14, 165, 233, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            border-radius: 14px;
+            padding: 24px 18px;
             margin: 20px 0;
         }
 
-        /* Loader */
-        .loader-overlay {
+        .daily-highlight {
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: var(--emerald);
+            margin: 6px 0;
+        }
+
+        .total-price-sub {
+            font-size: 0.92rem;
+            color: #cbd5e1;
+        }
+
+        .emi-callout {
+            display: inline-block;
+            background: var(--amber-light);
+            color: var(--amber);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .freebies-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .freebie-item {
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+
+        /* Overlay Spinner */
+        #b2cOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(7, 11, 20, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
             display: none;
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: var(--bg-color);
-            z-index: 10;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+            text-align: center;
         }
-        
+
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(16, 185, 129, 0.2);
-            border-top-color: var(--emerald);
+            width: 55px; height: 55px;
+            border: 4px solid rgba(16, 185, 129, 0.15);
+            border-top: 4px solid var(--emerald);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 20px;
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Results */
-        .result-container {
-            text-align: center;
-        }
-
-        .price-box {
-            background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(6,182,212,0.1));
-            border: 1px solid var(--emerald);
-            padding: 30px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-        }
-
-        .price-row {
-            margin: 15px 0;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .price-row:last-child { border-bottom: none; padding-bottom: 0; }
-
-        .price-title { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 5px; }
-        .price-amount { font-size: 2rem; font-weight: 700; color: #fff; }
-        
-        .includes-list {
-            text-align: left;
-            margin: 20px auto;
-            max-width: 400px;
-            font-size: 0.95rem;
-            color: var(--text-muted);
-        }
-        .includes-list li { margin-bottom: 10px; display: flex; align-items: center; }
-        .includes-list li::before { content: '✓'; color: var(--emerald); margin-right: 10px; font-weight: bold; }
-
-        /* Testimonials */
-        .testimonial-card {
-            padding: 30px;
-            text-align: left;
-        }
-        .stars { color: #fbbf24; margin-bottom: 15px; }
-        .testimonial-text { font-style: italic; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
-        .author { font-weight: 600; color: #fff; }
-        .author-loc { font-size: 0.85rem; color: var(--text-muted); }
-
-        /* FAQ */
-        .faq-item {
-            margin-bottom: 15px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .faq-question {
-            padding: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .faq-answer {
-            padding: 0 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-        .faq-item.open .faq-answer {
-            padding: 0 20px 20px;
-            max-height: 200px;
-        }
-        .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--emerald); }
-        .faq-icon { transition: transform 0.3s ease; font-size: 1.2rem; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* Footer */
         footer {
-            border-top: 1px solid var(--glass-border);
-            padding: 40px 0 20px;
             text-align: center;
-            color: var(--text-muted);
-        }
-        
-        /* Floating Buttons */
-        .fab {
-            position: fixed;
-            bottom: 20px;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            text-decoration: none;
-            z-index: 99;
-            transition: transform 0.3s;
-        }
-        .fab:hover { transform: scale(1.1); }
-        .fab-wa { right: 20px; background: #25D366; }
-        .fab-call { left: 20px; background: var(--cyan); display: none; }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .hero-btns { flex-direction: column; }
-            .fab-call { display: flex; }
-            .wizard-container { padding: 20px; }
-            .step-title { font-size: 1.4rem; }
-            .selectable-grid { grid-template-columns: 1fr; }
-            .wizard-footer { flex-direction: column-reverse; gap: 15px; }
-            .wizard-footer .btn { width: 100%; text-align: center; }
+            padding: 40px 16px;
+            color: var(--text-sub);
+            font-size: 0.82rem;
+            border-top: 1px solid var(--border-color);
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Banner -->
+    <!-- Top Announcement Banner -->
     <div class="top-banner">
-        <div class="banner-text active">🔒 Professional CCTV Installation Starting at ₹4,999 — Get Free Survey!</div>
-        <div class="banner-text">📱 Watch Your Home/Shop LIVE on Mobile — 24/7 Remote Monitoring</div>
-        <div class="banner-text">🛡️ 2-Year Warranty + Free Installation + Free Demo</div>
-        <div class="banner-text">⭐ Trusted by 1000+ Homes & Businesses in Odisha</div>
+        <span>🛡️</span>
+        <span>Limited Offer: 100% FREE Professional Installation & Mobile Live App on All Camera Sets!</span>
     </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>Protect What Matters Most</h1>
-            <p>Get a complete CCTV security system installed at your home, shop, or office. Free site survey. Professional installation. Watch live on your phone.</p>
+    <div class="container">
+        <!-- Hero Header -->
+        <header class="hero">
+            <div class="hero-badge">⚡ 30-Second Instant Cost Calculator</div>
+            <h1>Protect Your Home & Shop For <span>Less Than ₹18/Day</span></h1>
+            <p class="hero-sub">Complete CCTV Camera Setup with <strong>0% Interest No-Cost EMI Starting @ ₹699/Month</strong>. Crystal clear HD & Night Color viewing on all family mobile phones.</p>
+
+            <div class="per-day-banner">
+                <span>☕ Costs less than a cup of tea per day</span>
+                <span class="tag-cost">24/7 Protection</span>
+            </div>
+
+            <div class="perks-grid">
+                <div class="perk-card">
+                    <span class="p-icon">🎁</span>
+                    <div>
+                        <strong>FREE Installation</strong>
+                        <span>Save ₹2,500 on wiring & setup</span>
+                    </div>
+                </div>
+                <div class="perk-card">
+                    <span class="p-icon">📱</span>
+                    <div>
+                        <strong>FREE Mobile App</strong>
+                        <span>Live viewing on all phones</span>
+                    </div>
+                </div>
+                <div class="perk-card">
+                    <span class="p-icon">💳</span>
+                    <div>
+                        <strong>0% No-Cost EMI</strong>
+                        <span>Credit / Debit / Bajaj Cards</span>
+                    </div>
+                </div>
+                <div class="perk-card">
+                    <span class="p-icon">🔄</span>
+                    <div>
+                        <strong>2-Year Warranty</strong>
+                        <span>Direct replacement support</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Estimator Wizard -->
+        <div class="wizard-card" id="estimatorWizard">
             
-            <div class="trust-badges">
-                <span class="badge">✓ Free Installation</span>
-                <span class="badge">✓ 2-Year Warranty</span>
-                <span class="badge">✓ Mobile Viewing</span>
-                <span class="badge">✓ 24/7 Support</span>
-            </div>
-
-            <div class="hero-btns">
-                <a href="#estimator" class="btn btn-primary" onclick="startEstimator()">Get Free Quote →</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Why CCTV Section -->
-    <section>
-        <div class="container">
-            <div class="section-header">
-                <h2>Why Choose Our CCTV Solutions?</h2>
-                <p style="color: var(--text-muted)">Tailored security for every environment</p>
-            </div>
-            <div class="grid-4">
-                <div class="feature-card glass">
-                    <div class="feature-icon">🏠</div>
-                    <h3>Home Security</h3>
-                    <p>Keep your family safe. Monitor entry points, parking, and surroundings 24/7.</p>
-                </div>
-                <div class="feature-card glass">
-                    <div class="feature-icon">🏪</div>
-                    <h3>Shop & Showroom</h3>
-                    <p>Prevent theft, monitor employees, and review footage anytime from your phone.</p>
-                </div>
-                <div class="feature-card glass">
-                    <div class="feature-icon">🏢</div>
-                    <h3>Office & Warehouse</h3>
-                    <p>Track attendance, secure inventory, and ensure workplace safety.</p>
-                </div>
-                <div class="feature-card glass">
-                    <div class="feature-icon">🏗️</div>
-                    <h3>Factory & Construction</h3>
-                    <p>Monitor large areas with PTZ cameras and secure remote access.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How it Works -->
-    <section style="background: rgba(0,0,0,0.3);">
-        <div class="container">
-            <div class="section-header">
-                <h2>How It Works</h2>
-                <p style="color: var(--text-muted)">Simple, transparent, and hassle-free process</p>
-            </div>
-            <div class="grid-3">
-                <div class="step-card">
-                    <div class="step-icon">📋</div>
-                    <h3>1. Tell Us Your Needs</h3>
-                    <p style="color: var(--text-muted); margin-top: 10px;">Answer a few quick questions about your space to help us understand.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-icon">💰</div>
-                    <h3>2. Get Instant Estimate</h3>
-                    <p style="color: var(--text-muted); margin-top: 10px;">See your estimated cost immediately based on your exact requirements.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-icon">🔧</div>
-                    <h3>3. We Install & Setup</h3>
-                    <p style="color: var(--text-muted); margin-top: 10px;">Our technician visits, installs, and configures everything flawlessly.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Estimator Wizard -->
-    <section id="estimator" class="estimator-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Instant CCTV Cost Estimator</h2>
-                <p style="color: var(--text-muted)">Find out how much your setup will cost in 60 seconds.</p>
-            </div>
-
-            <div class="wizard-container glass">
-                
-                <div class="loader-overlay" id="loader">
-                    <div class="spinner"></div>
-                    <h3 style="color: #fff">Calculating your estimate...</h3>
+            <div id="wizardFormContent">
+                <!-- Stepper Progress Bar -->
+                <div class="steps-header">
+                    <div class="step-bubble active" data-step="1">1</div>
+                    <div class="step-bubble" data-step="2">2</div>
+                    <div class="step-bubble" data-step="3">3</div>
+                    <div class="step-bubble" data-step="4">4</div>
                 </div>
 
-                <div class="step-indicator" id="stepIndicator">Step 1 of 5</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
+                <!-- STEP 1: Premise & Camera Count -->
+                <div class="wizard-pane active" id="step1">
+                    <h2 class="pane-title">Where Do You Need CCTV?</h2>
+                    <p class="pane-sub">Select your property type and camera requirements:</p>
 
-                <!-- Step 1 -->
-                <div class="wizard-step active" id="step1">
-                    <h3 class="step-title">Where do you need CCTV?</h3>
-                    <div class="selectable-grid" id="locationType">
-                        <div class="select-card glass" data-val="Home">
-                            <span class="icon">🏠</span>Home / Apartment
+                    <div class="select-grid" id="premiseGrid">
+                        <div class="option-card selected" data-val="Home / Villa">
+                            <span class="card-icon">🏠</span>
+                            <span class="card-title">Home / Villa</span>
+                            <span class="card-tag">Family & Gate Safety</span>
                         </div>
-                        <div class="select-card glass" data-val="Shop">
-                            <span class="icon">🏪</span>Shop / Showroom
+                        <div class="option-card" data-val="Shop / Showroom">
+                            <span class="card-icon">🏪</span>
+                            <span class="card-title">Shop / Retail Store</span>
+                            <span class="card-tag">Counter & Customer</span>
                         </div>
-                        <div class="select-card glass" data-val="Office">
-                            <span class="icon">🏢</span>Office / Clinic
+                        <div class="option-card" data-val="Office / Commercial">
+                            <span class="card-icon">🏢</span>
+                            <span class="card-title">Office / Workplace</span>
+                            <span class="card-tag">Staff & Asset Monitor</span>
                         </div>
-                        <div class="select-card glass" data-val="Warehouse">
-                            <span class="icon">🏭</span>Warehouse / Factory
+                        <div class="option-card" data-val="Warehouse / Factory">
+                            <span class="card-icon">🏭</span>
+                            <span class="card-title">Warehouse / Factory</span>
+                            <span class="card-tag">Inventory Security</span>
+                        </div>
+                        <div class="option-card" data-val="Apartment / Society">
+                            <span class="card-icon">🏘️</span>
+                            <span class="card-title">Apartment / Society</span>
+                            <span class="card-tag">Boundary & Parking</span>
+                        </div>
+                        <div class="option-card" data-val="Other Location">
+                            <span class="card-icon">📍</span>
+                            <span class="card-title">Other Location</span>
+                            <span class="card-tag">Custom Site</span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <input type="text" id="locOther" class="form-control" placeholder="Other (Please specify)">
+
+                    <div class="camera-select-box">
+                        <div class="camera-counter-row">
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.95rem; color: #fff;">How Many Cameras Do You Need?</div>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">Adjust count or pick a quick recommendation below</div>
+                            </div>
+                            <div class="count-btn-wrap">
+                                <button type="button" class="btn-circle" onclick="adjustCameras(-1)">−</button>
+                                <span class="cam-display-num" id="camCountDisplay">4</span>
+                                <button type="button" class="btn-circle" onclick="adjustCameras(1)">+</button>
+                            </div>
+                        </div>
+
+                        <div class="preset-chips">
+                            <div class="preset-chip" onclick="setPresetCameras(2)">2 Cams (1-2 BHK / Small Shop)</div>
+                            <div class="preset-chip active" onclick="setPresetCameras(4)">4 Cams (⭐ Standard House / Store)</div>
+                            <div class="preset-chip" onclick="setPresetCameras(8)">8 Cams (Duplex / Large Showroom)</div>
+                            <div class="preset-chip" onclick="setPresetCameras(16)">16+ Cams (Commercial / Factory)</div>
+                        </div>
                     </div>
-                    <div class="wizard-footer">
+
+                    <div class="wizard-actions">
                         <div></div>
-                        <button class="btn btn-primary" onclick="nextStep(2)">Next Step →</button>
+                        <button type="button" class="btn-next" onclick="goToStep(2)">
+                            <span>Choose Camera Quality &rarr;</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Step 2 -->
-                <div class="wizard-step" id="step2">
-                    <h3 class="step-title">How many cameras do you need?</h3>
-                    
-                    <div class="quick-chips" id="camChips">
-                        <div class="chip" onclick="setCam(2)">2 Cameras</div>
-                        <div class="chip" onclick="setCam(4)">4 Cameras</div>
-                        <div class="chip" onclick="setCam(8)">8 Cameras</div>
-                        <div class="chip" onclick="setCam(16)">16 Cameras</div>
+                <!-- STEP 2: Package & Quality Tier -->
+                <div class="wizard-pane" id="step2">
+                    <h2 class="pane-title">Choose Quality & Warranty Package</h2>
+                    <p class="pane-sub">All packages include complete setup, DVR/NVR recorder, hard disk & cables:</p>
+
+                    <div class="packages-grid">
+                        <!-- Basic Economy -->
+                        <div class="package-card" onclick="selectPackage('economy', this)">
+                            <div>
+                                <div class="pkg-name">Basic Smart HD</div>
+                                <div class="pkg-brand">Economy Series (1080P)</div>
+                                <div class="pkg-price-row">
+                                    <div class="pkg-daily-rate" id="ecoDailyRate">₹18 <span style="font-size:0.9rem; font-weight:500;">/day</span></div>
+                                    <div class="pkg-daily-sub" id="ecoTotalPrice">Total: ~₹7,999 (or ₹699/mo EMI)</div>
+                                </div>
+                                <ul class="pkg-features">
+                                    <li><i>✓</i> 2MP Full HD Clarity</li>
+                                    <li><i>✓</i> Night Vision IR (20m)</li>
+                                    <li><i>✓</i> Mobile Live App</li>
+                                    <li><i>✓</i> 15 Days Video Recording</li>
+                                </ul>
+                            </div>
+                            <div class="pkg-warranty-badge">🛡️ 1 Year Warranty</div>
+                        </div>
+
+                        <!-- Most Popular -->
+                        <div class="package-card selected" onclick="selectPackage('popular', this)">
+                            <div class="popular-tag">⭐ MOST POPULAR</div>
+                            <div>
+                                <div class="pkg-name">Full Color Audio</div>
+                                <div class="pkg-brand">CP Plus / Hikvision (Top Brand)</div>
+                                <div class="pkg-price-row">
+                                    <div class="pkg-daily-rate" id="popDailyRate">₹28 <span style="font-size:0.9rem; font-weight:500;">/day</span></div>
+                                    <div class="pkg-daily-sub" id="popTotalPrice">Total: ~₹11,999 (or ₹999/mo EMI)</div>
+                                </div>
+                                <ul class="pkg-features">
+                                    <li><i>✓</i> 24/7 Color Night Vision (No B&W)</li>
+                                    <li><i>✓</i> Built-in Audio Mic (Voice Record)</li>
+                                    <li><i>✓</i> CP Plus / Hikvision Original</li>
+                                    <li><i>✓</i> 30 Days Video Recording</li>
+                                    <li><i>✓</i> Instant Motion Alert on Phone</li>
+                                </ul>
+                            </div>
+                            <div class="pkg-warranty-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--emerald);">🛡️ 2 Years Replacement Warranty</div>
+                        </div>
+
+                        <!-- Ultra 4K IP -->
+                        <div class="package-card" onclick="selectPackage('ultra', this)">
+                            <div>
+                                <div class="pkg-name">Ultra 4K IP Pro</div>
+                                <div class="pkg-brand">Hikvision / Dahua AI Network</div>
+                                <div class="pkg-price-row">
+                                    <div class="pkg-daily-rate" id="ultraDailyRate">₹45 <span style="font-size:0.9rem; font-weight:500;">/day</span></div>
+                                    <div class="pkg-daily-sub" id="ultraTotalPrice">Total: ~₹17,999 (or ₹1,499/mo EMI)</div>
+                                </div>
+                                <ul class="pkg-features">
+                                    <li><i>✓</i> 4K Ultra HD AI Face Clarity</li>
+                                    <li><i>✓</i> Human & Vehicle AI Detection</li>
+                                    <li><i>✓</i> Two-Way Talk (Speak & Listen)</li>
+                                    <li><i>✓</i> PoE Network Wiring (Long Life)</li>
+                                    <li><i>✓</i> 30-60 Days Recording</li>
+                                </ul>
+                            </div>
+                            <div class="pkg-warranty-badge" style="background: rgba(14, 165, 233, 0.15); color: var(--cyan);">🛡️ 3 Years Comprehensive Warranty</div>
+                        </div>
                     </div>
 
-                    <div class="counter-wrapper">
-                        <button class="counter-btn" onclick="updateCam(-1)">-</button>
-                        <div class="counter-value" id="camCount">4</div>
-                        <button class="counter-btn" onclick="updateCam(1)">+</button>
-                    </div>
-
-                    <div class="tip-box">
-                        💡 Not sure? As a guide: 2-bedroom home = 2-4 cameras, Small shop = 4-6 cameras, Office = 6-12 cameras.
-                    </div>
-
-                    <div class="wizard-footer">
-                        <button class="btn btn-secondary" onclick="prevStep(1)">← Back</button>
-                        <button class="btn btn-primary" onclick="nextStep(3)">Next Step →</button>
+                    <div class="wizard-actions">
+                        <button type="button" class="btn-prev" onclick="goToStep(1)">&larr; Back</button>
+                        <button type="button" class="btn-next" onclick="goToStep(3)">
+                            <span>Next: Installation Time &rarr;</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Step 3 -->
-                <div class="wizard-step" id="step3">
-                    <h3 class="step-title">What features do you need? (Select all that apply)</h3>
-                    <div class="selectable-grid multi-select" id="features">
-                        <div class="select-card glass selected" data-val="NightVision">
-                            <span class="icon">🌙</span>Night Vision (Standard)
-                        </div>
-                        <div class="select-card glass" data-val="ColorNightVision">
-                            <span class="icon">🌈</span>Color Night Vision
-                        </div>
-                        <div class="select-card glass" data-val="Audio">
-                            <span class="icon">🔊</span>Audio Recording
-                        </div>
-                        <div class="select-card glass" data-val="WiFi">
-                            <span class="icon">📶</span>WiFi / Wireless
-                        </div>
-                        <div class="select-card glass" data-val="PTZ">
-                            <span class="icon">🔄</span>360° PTZ Camera
-                        </div>
-                        <div class="select-card glass selected" data-val="Mobile">
-                            <span class="icon">📱</span>Mobile App Viewing
-                        </div>
-                    </div>
-                    <div class="wizard-footer">
-                        <button class="btn btn-secondary" onclick="prevStep(2)">← Back</button>
-                        <button class="btn btn-primary" onclick="nextStep(4)">Next Step →</button>
-                    </div>
-                </div>
+                <!-- STEP 3: Installation Timeline / Intent Segmentation -->
+                <div class="wizard-pane" id="step3">
+                    <h2 class="pane-title">When Do You Plan to Install?</h2>
+                    <p class="pane-sub">This helps us schedule your free site visit and assign our best engineer:</p>
 
-                <!-- Step 4 -->
-                <div class="wizard-step" id="step4">
-                    <h3 class="step-title">Recording & Storage Days</h3>
-                    <div class="selectable-grid" id="storageDays">
-                        <div class="select-card glass" data-val="7">7 Days</div>
-                        <div class="select-card glass selected" data-val="15">15 Days</div>
-                        <div class="select-card glass" data-val="30">30 Days</div>
-                        <div class="select-card glass" data-val="60">60 Days</div>
-                        <div class="select-card glass" data-val="90">90 Days</div>
-                    </div>
-                    <div class="tip-box">
-                        💡 Most homes choose 15-30 days. Shops and offices typically need 30-60 days for compliance.
-                    </div>
-                    <div class="wizard-footer">
-                        <button class="btn btn-secondary" onclick="prevStep(3)">← Back</button>
-                        <button class="btn btn-primary" onclick="nextStep(5)">Next Step →</button>
-                    </div>
-                </div>
+                    <div class="urgency-grid" id="urgencyGrid">
+                        <div class="urgency-card selected" data-val="Immediate (Next 1-2 Days)" data-priority="Hot">
+                            <span class="urgency-icon">🔥</span>
+                            <div>
+                                <div class="urgency-title">Immediate / Urgent (Next 1 – 2 Days)</div>
+                                <div class="urgency-desc">Need quick doorstep visit & same-day installation</div>
+                            </div>
+                        </div>
 
-                <!-- Step 5 -->
-                <div class="wizard-step" id="step5">
-                    <h3 class="step-title">Your Contact Details</h3>
-                    <div class="grid-2">
-                        <div class="form-group">
-                            <label>Full Name *</label>
-                            <input type="text" id="custName" class="form-control" required>
+                        <div class="urgency-card" data-val="This Week (Within 7 Days)" data-priority="Warm">
+                            <span class="urgency-icon">⚡</span>
+                            <div>
+                                <div class="urgency-title">This Week (Within 7 Days)</div>
+                                <div class="urgency-desc">Finalizing quote to schedule installation this week</div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>WhatsApp Number *</label>
-                            <input type="tel" id="custPhone" class="form-control" placeholder="+91" required>
+
+                        <div class="urgency-card" data-val="This Month (15-30 Days)" data-priority="Planning">
+                            <span class="urgency-icon">📋</span>
+                            <div>
+                                <div class="urgency-title">This Month (15 – 30 Days)</div>
+                                <div class="urgency-desc">Building / renovating site, planning in advance</div>
+                            </div>
+                        </div>
+
+                        <div class="urgency-card" data-val="Just Checking Prices / Enquiry" data-priority="Enquiry">
+                            <span class="urgency-icon">ℹ️</span>
+                            <div>
+                                <div class="urgency-title">Just Checking Prices / Enquiry</div>
+                                <div class="urgency-desc">Gathering budget estimate for future reference</div>
+                            </div>
                         </div>
                     </div>
+
                     <div class="form-group">
-                        <label>Location / Area / City *</label>
-                        <input type="text" id="custLoc" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Preferred time for FREE site survey</label>
-                        <select id="custTime" class="form-control" style="appearance: auto;">
-                            <option>Morning</option>
-                            <option>Afternoon</option>
-                            <option>Evening</option>
-                            <option>Weekend</option>
+                        <label class="form-label">Preferred Time for Free Consultation</label>
+                        <select id="preferredTime" class="form-select">
+                            <option value="Morning (9 AM - 12 PM)">Morning (9:00 AM – 12:00 PM)</option>
+                            <option value="Afternoon (12 PM - 4 PM)">Afternoon (12:00 PM – 4:00 PM)</option>
+                            <option value="Evening (4 PM - 8 PM)" selected>Evening (4:00 PM – 8:00 PM)</option>
+                            <option value="Anytime on WhatsApp">Anytime on WhatsApp (No Calls)</option>
                         </select>
                     </div>
-                    <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-top: 20px;">
-                        <input type="checkbox" id="waCheck" checked style="width: 20px; height: 20px; accent-color: var(--emerald);">
-                        <label style="margin:0;">Send me the quote on WhatsApp</label>
-                    </div>
-                    <p id="formError" style="color: #ef4444; display: none; margin-bottom: 15px;">Please fill all required fields.</p>
-                    <div class="wizard-footer">
-                        <button class="btn btn-secondary" onclick="prevStep(4)">← Back</button>
-                        <button class="btn btn-primary" onclick="calculateEstimate()">Get My Estimate ⚡</button>
+
+                    <div class="wizard-actions">
+                        <button type="button" class="btn-prev" onclick="goToStep(2)">&larr; Back</button>
+                        <button type="button" class="btn-next" onclick="goToStep(4)">
+                            <span>Get My Instant Quote &rarr;</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Result Step -->
-                <div class="wizard-step" id="stepResult">
-                    <div class="result-container">
-                        <h3 class="step-title" style="color: var(--emerald);">Your Estimate is Ready!</h3>
-                        
-                        <div class="price-box">
-                            <div class="price-row">
-                                <div class="price-title">Basic Setup (Standard Definition / Analog)</div>
-                                <div class="price-amount" id="resBasic">₹0</div>
-                            </div>
-                            <div class="price-row">
-                                <div class="price-title">Premium Setup (High Definition IP / WiFi)</div>
-                                <div class="price-amount" id="resPremium">₹0</div>
-                            </div>
-                        </div>
+                <!-- STEP 4: Contact & Send Estimate -->
+                <div class="wizard-pane" id="step4">
+                    <h2 class="pane-title">Where Should We Send Your Estimate?</h2>
+                    <p class="pane-sub">We will send your detailed PDF estimate with 0% EMI calculation on WhatsApp.</p>
 
-                        <ul class="includes-list">
-                            <li>Cameras + DVR/NVR + Hard Drive</li>
-                            <li>Professional Installation</li>
-                            <li>Wiring & Accessories</li>
-                            <li>Mobile App Configuration</li>
-                            <li>2-Year Replacement Warranty</li>
-                        </ul>
+                    <div class="form-group">
+                        <label class="form-label">Your Name *</label>
+                        <input type="text" id="custName" class="form-input" placeholder="e.g. Rajesh Kumar" required>
+                    </div>
 
-                        <div style="margin-top: 40px;">
-                            <p class="btn btn-primary" style="width: 100%; max-width: 300px; margin-bottom: 15px; text-align: center; display: inline-block;">✅ Quote Request Submitted!</p>
-                            <p style="color: var(--text-muted); font-size: 0.9rem;">Our team will contact you within 30 minutes to confirm your FREE site survey.</p>
+                    <div class="form-group">
+                        <label class="form-label">WhatsApp Mobile Number *</label>
+                        <div style="display:flex;">
+                            <span style="background: rgba(255,255,255,0.06); padding: 12px 14px; border-radius: 8px 0 0 8px; border: 1px solid var(--border-color); border-right: none; color: #cbd5e1; font-weight: 600;">+91</span>
+                            <input type="tel" id="custPhone" class="form-input" style="border-radius: 0 8px 8px 0;" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" required>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label class="form-label">City / Locality *</label>
+                        <input type="text" id="custLoc" class="form-input" placeholder="e.g. Jayadev Vihar, Bhubaneswar" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Any Special Requirements (Optional)</label>
+                        <input type="text" id="custReq" class="form-input" placeholder="e.g. Need 1 outdoor bullet and 3 indoor domes">
+                    </div>
+
+                    <div class="wizard-actions">
+                        <button type="button" class="btn-prev" onclick="goToStep(3)">&larr; Back</button>
+                        <button type="button" class="btn-next" onclick="submitEstimateForm()">
+                            <span>Calculate My Final Price &rarr;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESULT SCREEN -->
+            <div id="estimateResultScreen">
+                <div class="estimate-badge">✓</div>
+                <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 6px;">Your Custom Estimate Is Ready!</h2>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Here is the complete price breakdown for your selected setup:</p>
+
+                <div class="quote-box">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Estimated Daily Security Cost</div>
+                    <div class="daily-highlight" id="resDailyCost">₹28 / day</div>
+                    <div class="total-price-sub" id="resTotalCost">Complete Package: <strong>₹11,999</strong> (All inclusive)</div>
+                    <div class="emi-callout" id="resEmiCallout">💳 No-Cost EMI: ₹999 / month on 0% Interest</div>
                 </div>
 
-            </div>
-        </div>
-    </section>
+                <div class="freebies-list">
+                    <div class="freebie-item">
+                        <span>🎁</span>
+                        <div>
+                            <strong>100% Free Installation</strong>
+                            <div style="color:var(--text-muted); font-size:0.75rem;">Wiring & fitting included (Save ₹2,500)</div>
+                        </div>
+                    </div>
+                    <div class="freebie-item">
+                        <span>📱</span>
+                        <div>
+                            <strong>Free Mobile App Setup</strong>
+                            <div style="color:var(--text-muted); font-size:0.75rem;">Connected to all family phones</div>
+                        </div>
+                    </div>
+                    <div class="freebie-item">
+                        <span>🛡️</span>
+                        <div>
+                            <strong>Free 1st Year AMC</strong>
+                            <div style="color:var(--text-muted); font-size:0.75rem;">On-site support & health checks</div>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- Testimonials -->
-    <section>
-        <div class="container">
-            <div class="section-header">
-                <h2>Trusted by 1000+ Customers</h2>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 15px;">
+                    Our senior technician is preparing your detailed quote copy with warranty card. We will connect with you on WhatsApp shortly.
+                </p>
             </div>
-            <div class="grid-3">
-                <div class="testimonial-card glass">
-                    <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"Got 4 cameras installed at my grocery shop. Can see everything on my phone now. Excellent service and very polite technicians!"</p>
-                    <div class="author">Ramesh K.</div>
-                    <div class="author-loc">Bhubaneswar</div>
-                </div>
-                <div class="testimonial-card glass">
-                    <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"Very professional installation. The night vision is crystal clear. I feel much safer leaving my home now. Highly recommend!"</p>
-                    <div class="author">Priya S.</div>
-                    <div class="author-loc">Cuttack</div>
-                </div>
-                <div class="testimonial-card glass">
-                    <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"They installed 8 cameras at my warehouse within a single day. The wire routing was very neat. Best price I found anywhere."</p>
-                    <div class="author">Sandeep M.</div>
-                    <div class="author-loc">Rourkela</div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- FAQ -->
-    <section style="background: rgba(0,0,0,0.3);">
-        <div class="container" style="max-width: 800px;">
-            <div class="section-header">
-                <h2>Frequently Asked Questions</h2>
-            </div>
-            <div class="faq-list">
-                <div class="faq-item">
-                    <div class="faq-question">How long does installation take? <span class="faq-icon">+</span></div>
-                    <div class="faq-answer">Most installations are completed within 2-4 hours depending on the number of cameras and site complexity.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">Can I watch cameras on my phone? <span class="faq-icon">+</span></div>
-                    <div class="faq-answer">Yes! We set up mobile viewing on your smartphone (Android & iOS) during installation. Watch live from anywhere in the world.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">What if a camera stops working? <span class="faq-icon">+</span></div>
-                    <div class="faq-answer">All our cameras come with a 2-year replacement warranty. We provide free on-site support if any manufacturing defect occurs.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">Is wiring included in the price? <span class="faq-icon">+</span></div>
-                    <div class="faq-answer">Yes, standard wiring up to 30 meters per camera is included free of charge in our estimate.</div>
-                </div>
-            </div>
         </div>
-    </section>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="b2cOverlay">
+        <div class="spinner"></div>
+        <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 8px;">Calculating Your Package Cost...</h3>
+        <p style="color: var(--emerald); font-weight: 600; font-size: 0.9rem;">Applying 100% Free Installation & No-Cost EMI Discounts</p>
+    </div>
 
     <footer>
-        <div class="container">
-            <p style="font-size: 0.85rem; opacity: 0.6;">Professional CCTV Installation &amp; Security Solutions</p>
-            <p style="font-size: 0.8rem; opacity: 0.4; margin-top: 8px;">&copy; 2026 All rights reserved.</p>
-        </div>
+        <p>🔒 100% Genuine Certified Cameras • Brand Warranty • Zero Hidden Charges</p>
+        <p style="margin-top: 6px; opacity: 0.6;">&copy; 2026 Smart Security Systems. All rights reserved.</p>
     </footer>
 
+    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script>
         let activeSupabaseUrl = 'https://lxfkygzdywysdlaxmpdo.supabase.co';
@@ -938,257 +1163,228 @@
             }
             return _supabaseB2C;
         }
-    </script>
-    <script>
-        // Banner Rotation
-        const banners = document.querySelectorAll('.banner-text');
-        let currentBanner = 0;
-        setInterval(() => {
-            banners[currentBanner].classList.remove('active');
-            banners[currentBanner].classList.add('exit');
-            
-            setTimeout(() => {
-                banners[currentBanner].classList.remove('exit');
-                currentBanner = (currentBanner + 1) % banners.length;
-                banners[currentBanner].classList.add('active');
-            }, 500);
-        }, 3500);
 
-        // FAQ Toggle
-        document.querySelectorAll('.faq-question').forEach(item => {
-            item.addEventListener('click', () => {
-                const parent = item.parentElement;
-                const isOpen = parent.classList.contains('open');
-                
-                document.querySelectorAll('.faq-item').forEach(faq => faq.classList.remove('open'));
-                
-                if (!isOpen) {
-                    parent.classList.add('open');
-                }
-            });
-        });
-
-        // Wizard Logic
+        // State variables
         let currentStep = 1;
-        const totalSteps = 5;
-
-        // Selections State
-        const state = {
-            location: 'Home',
-            cameras: 4,
-            features: ['NightVision', 'Mobile'],
-            storage: '15'
-        };
-
-        // Single Select Logic
-        function setupSingleSelect(containerId, stateKey) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            const cards = container.querySelectorAll('.select-card');
-            cards.forEach(card => {
-                card.addEventListener('click', () => {
-                    cards.forEach(c => c.classList.remove('selected'));
-                    card.classList.add('selected');
-                    state[stateKey] = card.dataset.val;
-                });
-            });
-        }
+        let selectedPremise = "Home / Villa";
+        let cameraCount = 4;
+        let selectedPackage = "popular"; // economy | popular | ultra
+        let selectedUrgency = "Immediate (Next 1-2 Days)";
+        let leadPriority = "Hot";
 
         document.addEventListener('DOMContentLoaded', () => {
-            setupSingleSelect('locationType', 'location');
-            setupSingleSelect('storageDays', 'storage');
-
-            // Multi Select Logic
-            const featureCards = document.querySelectorAll('#features .select-card');
-            featureCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    card.classList.toggle('selected');
-                    const val = card.dataset.val;
-                    if (card.classList.contains('selected')) {
-                        if (!state.features.includes(val)) state.features.push(val);
-                    } else {
-                        state.features = state.features.filter(f => f !== val);
-                    }
+            // Premise Selection
+            document.querySelectorAll('#premiseGrid .option-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('#premiseGrid .option-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedPremise = this.getAttribute('data-val') || this.innerText.trim();
                 });
             });
+
+            // Urgency Selection
+            document.querySelectorAll('#urgencyGrid .urgency-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('#urgencyGrid .urgency-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedUrgency = this.getAttribute('data-val');
+                    leadPriority = this.getAttribute('data-priority') || 'Warm';
+                });
+            });
+
+            recalculatePackagePrices();
         });
 
         // Camera Counter Logic
-        function updateCam(change) {
-            let newVal = state.cameras + change;
-            if (newVal >= 1 && newVal <= 32) {
-                setCam(newVal);
+        function adjustCameras(change) {
+            let nextVal = cameraCount + change;
+            if (nextVal >= 1 && nextVal <= 32) {
+                cameraCount = nextVal;
+                updateCamDisplay();
             }
         }
-        function setCam(val) {
-            state.cameras = val;
-            document.getElementById('camCount').innerText = val;
-            
-            document.querySelectorAll('.chip').forEach(c => {
-                if (parseInt(c.innerText) === val) c.classList.add('active');
-                else c.classList.remove('active');
+
+        function setPresetCameras(num) {
+            cameraCount = num;
+            updateCamDisplay();
+        }
+
+        function updateCamDisplay() {
+            document.getElementById('camCountDisplay').innerText = cameraCount;
+            document.querySelectorAll('.preset-chip').forEach(chip => {
+                chip.classList.remove('active');
+                if (chip.innerText.startsWith(`${cameraCount} Cams`)) {
+                    chip.classList.add('active');
+                }
             });
+            recalculatePackagePrices();
         }
 
-        // Navigation
-        function nextStep(step) {
-            if(step === 6) return; // Prevent going beyond
-            
-            document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
-            document.getElementById(`step${step}`).classList.add('active');
-            
+        // Package Selection
+        function selectPackage(pkgKey, cardEl) {
+            selectedPackage = pkgKey;
+            document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+            cardEl.classList.add('selected');
+        }
+
+        // Live Package Price Calculations based on Camera Count
+        function recalculatePackagePrices() {
+            // Economy: ~₹2,000 per cam + ₹3,000 base
+            const ecoTotal = (cameraCount * 1400) + 2400;
+            const ecoDaily = Math.round(ecoTotal / 365);
+            const ecoEmi = Math.round(ecoTotal / 12);
+            document.getElementById('ecoDailyRate').innerHTML = `₹${ecoDaily} <span style="font-size:0.9rem; font-weight:500;">/day</span>`;
+            document.getElementById('ecoTotalPrice').innerText = `Total: ~₹${ecoTotal.toLocaleString('en-IN')} (or ₹${ecoEmi}/mo EMI)`;
+
+            // Popular (Color Audio CP Plus / Hikvision): ~₹2,200 per cam + ₹4,000 base
+            const popTotal = (cameraCount * 2100) + 3600;
+            const popDaily = Math.round(popTotal / 365);
+            const popEmi = Math.round(popTotal / 12);
+            document.getElementById('popDailyRate').innerHTML = `₹${popDaily} <span style="font-size:0.9rem; font-weight:500;">/day</span>`;
+            document.getElementById('popTotalPrice').innerText = `Total: ~₹${popTotal.toLocaleString('en-IN')} (or ₹${popEmi}/mo EMI)`;
+
+            // Ultra 4K IP: ~₹3,500 per cam + ₹6,000 base
+            const ultraTotal = (cameraCount * 3200) + 5200;
+            const ultraDaily = Math.round(ultraTotal / 365);
+            const ultraEmi = Math.round(ultraTotal / 12);
+            document.getElementById('ultraDailyRate').innerHTML = `₹${ultraDaily} <span style="font-size:0.9rem; font-weight:500;">/day</span>`;
+            document.getElementById('ultraTotalPrice').innerText = `Total: ~₹${ultraTotal.toLocaleString('en-IN')} (or ₹${ultraEmi}/mo EMI)`;
+        }
+
+        function goToStep(step) {
+            document.querySelectorAll('.step-bubble').forEach((b, idx) => {
+                const s = idx + 1;
+                if (s === step) {
+                    b.className = 'step-bubble active';
+                } else if (s < step) {
+                    b.className = 'step-bubble completed';
+                    b.innerText = '✓';
+                } else {
+                    b.className = 'step-bubble';
+                    b.innerText = s;
+                }
+            });
+
+            document.querySelectorAll('.wizard-pane').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById('step' + step);
+            if (target) target.classList.add('active');
+
             currentStep = step;
-            updateProgress();
+            const wiz = document.getElementById('estimatorWizard');
+            if (wiz) wiz.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        function prevStep(step) {
-            document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
-            document.getElementById(`step${step}`).classList.add('active');
-            
-            currentStep = step;
-            updateProgress();
-        }
+        // Final Submission
+        async function submitEstimateForm() {
+            const nameEl = document.getElementById('custName');
+            const phoneEl = document.getElementById('custPhone');
+            const locEl = document.getElementById('custLoc');
 
-        function updateProgress() {
-            const perc = (currentStep / totalSteps) * 100;
-            document.getElementById('progressFill').style.width = `${perc}%`;
-            document.getElementById('stepIndicator').innerText = `Step ${currentStep} of ${totalSteps}`;
-            
-            if (currentStep > totalSteps) {
-                document.getElementById('stepIndicator').style.display = 'none';
-                document.querySelector('.progress-bar').style.display = 'none';
-            }
-        }
+            const name = (nameEl ? nameEl.value : '').trim();
+            const phone = (phoneEl ? phoneEl.value : '').trim();
+            const loc = (locEl ? locEl.value : '').trim();
+            const req = document.getElementById('custReq') ? document.getElementById('custReq').value.trim() : '';
+            const preferredTime = document.getElementById('preferredTime') ? document.getElementById('preferredTime').value : 'Evening';
 
-        function startEstimator() {
-            // smooth scroll to estimator
-            document.getElementById('estimator').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Calculation & Submission
-        function calculateEstimate() {
-            // Validate step 5
-            const name = document.getElementById('custName').value.trim();
-            const phone = document.getElementById('custPhone').value.trim();
-            const loc = document.getElementById('custLoc').value.trim();
-            
-            if(!name || !phone || !loc) {
-                document.getElementById('formError').style.display = 'block';
+            if (!name) {
+                alert("Please enter your name.");
+                if (nameEl) nameEl.focus();
                 return;
             }
-            document.getElementById('formError').style.display = 'none';
+            if (!phone || phone.length < 10) {
+                alert("Please enter a valid 10-digit mobile number.");
+                if (phoneEl) phoneEl.focus();
+                return;
+            }
+            if (!loc) {
+                alert("Please enter your city/locality.");
+                if (locEl) locEl.focus();
+                return;
+            }
 
-            // Show Loader
-            document.getElementById('loader').style.display = 'flex';
+            // Show calculating overlay
+            const overlay = document.getElementById('b2cOverlay');
+            if (overlay) overlay.style.display = 'flex';
 
-            // Cost Logic
-            let camCount = state.cameras;
-            
-            // Recorders
-            let dvrPrice = camCount <= 4 ? 2500 : (camCount <= 8 ? 4000 : 7000);
-            let nvrPrice = camCount <= 4 ? 4500 : (camCount <= 8 ? 7000 : 14000);
+            // Calculate cost details
+            let totalPackageCost = 11999;
+            let packageName = "Full Color Audio (CP Plus / Hikvision 2-Year Warranty)";
+            if (selectedPackage === 'economy') {
+                totalPackageCost = (cameraCount * 1400) + 2400;
+                packageName = "Basic Smart HD (1-Year Warranty)";
+            } else if (selectedPackage === 'popular') {
+                totalPackageCost = (cameraCount * 2100) + 3600;
+                packageName = "Full Color Audio (CP Plus / Hikvision 2-Year Warranty)";
+            } else {
+                totalPackageCost = (cameraCount * 3200) + 5200;
+                packageName = "Ultra 4K IP Pro (Hikvision / Dahua AI 3-Year Warranty)";
+            }
 
-            // Storage
-            const hddPrices = { '7': 1500, '15': 3000, '30': 5000, '60': 8500, '90': 12000 };
-            let hddPrice = hddPrices[state.storage] || 3000;
+            const dailyCost = Math.round(totalPackageCost / 365);
+            const emiCost = Math.round(totalPackageCost / 12);
 
-            // Base per camera setup
-            let labor = 500 * camCount;
-            let cable = 300 * camCount;
-            let accessories = 200 * camCount;
-
-            // Cameras
-            let analogCam = 1500 * camCount;
-            let ipCam = 3500 * camCount;
-
-            // Premium Features
-            let premiumAdds = 0;
-            if(state.features.includes('ColorNightVision')) premiumAdds += (800 * camCount);
-            if(state.features.includes('WiFi')) premiumAdds += (1500 * camCount);
-            if(state.features.includes('PTZ')) premiumAdds += (5000 * Math.max(1, Math.floor(camCount/4))); // Assuming 1 PTZ per 4 cams
-
-            // Totals
-            let basicTotal = analogCam + dvrPrice + hddPrice + labor + cable + accessories;
-            let premiumTotal = ipCam + nvrPrice + hddPrice + labor + cable + accessories + premiumAdds;
-
-            // Format numbers
-            const formatRs = (num) => '₹' + num.toLocaleString('en-IN');
-            
-            // Build Lead Object
             const leadData = {
                 timestamp: new Date().toISOString(),
-                locationType: state.location === 'Other' ? document.getElementById('locOther').value : state.location,
-                cameraCount: state.cameras,
-                features: state.features,
-                storageDays: state.storage,
                 name: name,
-                whatsapp: phone,
+                whatsapp: "+91" + phone,
                 location: loc,
-                preferredTime: document.getElementById('custTime').value,
-                sendWhatsappQuote: document.getElementById('waCheck').checked,
-                estimatedBasicCost: basicTotal,
-                estimatedPremiumCost: premiumTotal
+                location_type: selectedPremise,
+                camera_count: cameraCount,
+                package: packageName,
+                urgency: selectedUrgency,
+                priority: leadPriority,
+                preferred_time: preferredTime,
+                specific_requirements: req,
+                estimated_basic_cost: totalPackageCost,
+                estimated_premium_cost: emiCost
             };
 
-            // Save to localStorage
-            saveLeadData(leadData);
+            // LocalStorage backup
+            try {
+                let leads = JSON.parse(localStorage.getItem('b2c_leads') || '[]');
+                leads.push(leadData);
+                localStorage.setItem('b2c_leads', JSON.stringify(leads));
+            } catch(e) {}
 
-            // Mock network delay then show result
-            setTimeout(() => {
-                document.getElementById('loader').style.display = 'none';
-                
-                // Show range +/- 10%
-                let basicMin = Math.floor(basicTotal * 0.9 / 100) * 100;
-                let basicMax = Math.ceil(basicTotal * 1.1 / 100) * 100;
-                let premMin = Math.floor(premiumTotal * 0.9 / 100) * 100;
-                let premMax = Math.ceil(premiumTotal * 1.1 / 100) * 100;
-
-                document.getElementById('resBasic').innerText = `${formatRs(basicMin)} - ${formatRs(basicMax)}`;
-                document.getElementById('resPremium').innerText = `${formatRs(premMin)} - ${formatRs(premMax)}`;
-
-                document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
-                document.getElementById('stepResult').classList.add('active');
-                currentStep++;
-                updateProgress();
-
-            }, 2000);
-        }
-
-        async function saveLeadData(data) {
+            // Save to Supabase
             try {
                 const client = getSupabase();
                 if (client) {
                     client.from('b2c_leads').insert({
-                        name: data.name,
-                        whatsapp: data.whatsapp,
-                        location: data.location,
-                        location_type: data.locationType,
-                        camera_count: data.cameraCount,
-                        features: data.features,
-                        storage_days: data.storageDays,
-                        preferred_time: data.preferredTime,
-                        specific_requirements: document.getElementById('custReq') ? document.getElementById('custReq').value : '',
-                        estimated_basic_cost: data.estimatedBasicCost,
-                        estimated_premium_cost: data.estimatedPremiumCost
+                        name: name,
+                        whatsapp: "+91" + phone,
+                        location: loc,
+                        location_type: `${selectedPremise} | ${packageName} | [${leadPriority} Priority - ${selectedUrgency}]`,
+                        camera_count: cameraCount,
+                        features: [packageName, selectedUrgency, `Priority: ${leadPriority}`],
+                        storage_days: 30,
+                        preferred_time: preferredTime,
+                        specific_requirements: req,
+                        estimated_basic_cost: totalPackageCost,
+                        estimated_premium_cost: emiCost
                     }).then(({ error }) => {
-                        if (error) console.warn('Supabase b2c insert note:', error);
+                        if (error) console.warn('Supabase b2c status:', error);
                     }).catch(err => {
-                        console.warn('Supabase b2c catch note:', err);
+                        console.warn('Supabase b2c dispatch note:', err);
                     });
                 }
-            } catch (err) {
-                console.warn('Supabase exception note:', err);
-            }
-            try {
-                let leads = JSON.parse(localStorage.getItem('b2c_leads') || '[]');
-                leads.push(data);
-                localStorage.setItem('b2c_leads', JSON.stringify(leads));
-                
-                let count = parseInt(localStorage.getItem('b2c_lead_count') || '0');
-                localStorage.setItem('b2c_lead_count', count + 1);
-            } catch (e) {
-                console.error('Error saving lead data to localStorage', e);
-            }
+            } catch(e) {}
+
+            setTimeout(() => {
+                if (overlay) overlay.style.display = 'none';
+
+                const formContent = document.getElementById('wizardFormContent');
+                const resScreen = document.getElementById('estimateResultScreen');
+                if (formContent) formContent.style.display = 'none';
+                if (resScreen) resScreen.style.display = 'block';
+
+                document.getElementById('resDailyCost').innerText = `₹${dailyCost} / day`;
+                document.getElementById('resTotalCost').innerHTML = `Complete Package: <strong>₹${totalPackageCost.toLocaleString('en-IN')}</strong> (All inclusive)`;
+                document.getElementById('resEmiCallout').innerText = `💳 No-Cost EMI: ₹${emiCost.toLocaleString('en-IN')} / month on 0% Interest`;
+
+                const wiz = document.getElementById('estimatorWizard');
+                if (wiz) wiz.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 1500);
         }
     </script>
 </body>

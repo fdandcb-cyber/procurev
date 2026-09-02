@@ -312,10 +312,9 @@
                 <h2>Admin Dashboard</h2>
                 <span id="backend-status" class="tag" style="background: rgba(245, 158, 11, 0.15); color: var(--accent); font-size: 0.8rem; padding: 4px 8px; border-radius: 4px;">Connecting...</span>
             </div>
-            <div class="flex gap-4 align-center" style="flex-wrap: wrap;">
+            <div class="flex gap-4 align-center">
                 <span style="color: var(--text-muted); font-size: 0.875rem;" id="current-time"></span>
-                <button class="btn" onclick="openDbSettingsModal()" title="Supabase Database Settings"><i class="fas fa-database"></i> Database</button>
-                <button class="btn" onclick="refreshData()" title="Refresh Data"><i class="fas fa-sync-alt"></i></button>
+                <button class="btn" onclick="refreshData()" title="Refresh Data"><i class="fas fa-sync-alt"></i> Refresh</button>
                 <button class="btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </header>
@@ -478,40 +477,6 @@
         </div>
     </div>
 
-    <!-- Database Settings Modal -->
-    <div id="db-settings-modal" class="modal-overlay">
-        <div class="modal-card" style="max-width: 600px;">
-            <div class="modal-header">
-                <div class="flex align-center gap-2">
-                    <i class="fas fa-database text-accent"></i>
-                    <h3>Supabase Cloud Database Settings</h3>
-                </div>
-                <button class="btn-close" onclick="closeDbSettingsModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1rem;">
-                    Sync leads across all devices by entering your active Supabase Project URL and Anon Key from <strong>Supabase Dashboard &rarr; Project Settings &rarr; API</strong>.
-                </p>
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label class="form-label" style="display:block; margin-bottom: 0.4rem; font-size: 0.85rem; font-weight: 600;">Project URL</label>
-                    <input type="text" id="cfg-supabase-url" class="search-input" style="width: 100%;" placeholder="https://your-project.supabase.co">
-                </div>
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label class="form-label" style="display:block; margin-bottom: 0.4rem; font-size: 0.85rem; font-weight: 600;">Anon / Public API Key</label>
-                    <textarea id="cfg-supabase-key" class="search-input" style="width: 100%; height: 80px; font-family: monospace; font-size: 0.8rem;" placeholder="eyJhbGci..."></textarea>
-                </div>
-                <div id="cfg-test-status" style="font-size: 0.85rem; margin-top: 0.5rem; display: none;"></div>
-            </div>
-            <div class="modal-footer flex justify-between align-center">
-                <button class="btn btn-danger" style="font-size: 0.8rem;" onclick="resetDefaultDb()">Reset Default</button>
-                <div class="flex gap-2">
-                    <button class="btn" onclick="closeDbSettingsModal()">Cancel</button>
-                    <button class="btn btn-primary" onclick="saveDbSettings()"><i class="fas fa-save"></i> Save & Connect</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script>
         let activeSupabaseUrl = 'https://lxfkygzdywysdlaxmpdo.supabase.co';
@@ -550,40 +515,6 @@
                 }
             }
             return _supabaseClient;
-        }
-
-        function openDbSettingsModal() {
-            const url = localStorage.getItem('custom_supabase_url') || activeSupabaseUrl;
-            const key = localStorage.getItem('custom_supabase_key') || activeSupabaseKey;
-            document.getElementById('cfg-supabase-url').value = url;
-            document.getElementById('cfg-supabase-key').value = key;
-            document.getElementById('cfg-test-status').style.display = 'none';
-            document.getElementById('db-settings-modal').classList.add('active');
-        }
-
-        function closeDbSettingsModal() {
-            document.getElementById('db-settings-modal').classList.remove('active');
-        }
-
-        async function saveDbSettings() {
-            const url = document.getElementById('cfg-supabase-url').value.trim();
-            const key = document.getElementById('cfg-supabase-key').value.trim();
-            if(!url || !key) {
-                alert("Please enter both Supabase Project URL and Anon Key.");
-                return;
-            }
-            localStorage.setItem('custom_supabase_url', url);
-            localStorage.setItem('custom_supabase_key', key);
-            _supabaseClient = null;
-            closeDbSettingsModal();
-            refreshData();
-        }
-
-        function resetDefaultDb() {
-            localStorage.removeItem('custom_supabase_url');
-            localStorage.removeItem('custom_supabase_key');
-            _supabaseClient = null;
-            openDbSettingsModal();
         }
 
         // Data variables
@@ -880,6 +811,7 @@
             const filtered = b2cLeads.filter(lead => {
                 return (lead.name?.toLowerCase().includes(search) || 
                         lead.location?.toLowerCase().includes(search) ||
+                        lead.locationType?.toLowerCase().includes(search) ||
                         lead.whatsapp?.includes(search));
             });
             
@@ -890,20 +822,33 @@
             
             filtered.forEach((lead, idx) => {
                 const tr = document.createElement('tr');
-                const estCost = lead.estimatedBasicCost ? `${formatINR(lead.estimatedBasicCost)} - ${formatINR(lead.estimatedPremiumCost)}` : 'N/A';
+                const estCost = lead.estimatedBasicCost ? `${formatINR(lead.estimatedBasicCost)} (EMI: ${formatINR(lead.estimatedPremiumCost)}/mo)` : 'N/A';
                 
+                // Priority Tag logic
+                let priorityHtml = '';
+                const locTypeStr = lead.locationType || '';
+                if(locTypeStr.includes('Hot') || (lead.features && lead.features.some(f => String(f).includes('Hot')))) {
+                    priorityHtml = `<span class="tag" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; font-weight: 700; margin-left: 4px;">🔥 Urgent</span>`;
+                } else if(locTypeStr.includes('Warm') || (lead.features && lead.features.some(f => String(f).includes('Warm')))) {
+                    priorityHtml = `<span class="tag" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; font-weight: 700; margin-left: 4px;">⚡ This Week</span>`;
+                } else if(locTypeStr.includes('Planning') || (lead.features && lead.features.some(f => String(f).includes('Planning')))) {
+                    priorityHtml = `<span class="tag" style="background: rgba(14, 165, 233, 0.2); color: #0ea5e9; font-weight: 700; margin-left: 4px;">📋 Planning</span>`;
+                } else if(locTypeStr.includes('Enquiry') || (lead.features && lead.features.some(f => String(f).includes('Enquiry')))) {
+                    priorityHtml = `<span class="tag" style="background: rgba(148, 163, 184, 0.2); color: #94a3b8; font-weight: 700; margin-left: 4px;">ℹ️ Enquiry</span>`;
+                }
+
                 tr.innerHTML = `
                     <td>${idx + 1}</td>
                     <td><div style="font-size:0.85rem">${formatDate(lead.timestamp)}</div></td>
-                    <td><strong>${lead.name || '-'}</strong></td>
+                    <td><strong>${lead.name || '-'}</strong> ${priorityHtml}</td>
                     <td><a href="https://wa.me/91${lead.whatsapp}" class="text-accent" target="_blank">${lead.whatsapp || '-'}</a></td>
                     <td>${lead.location || '-'}</td>
-                    <td>${lead.locationType || '-'}</td>
-                    <td>${lead.cameraCount || '-'}</td>
-                    <td><span style="color:var(--success)">${estCost}</span></td>
+                    <td><div style="max-width: 200px; font-size: 0.82rem; line-height: 1.3;">${lead.locationType || '-'}</div></td>
+                    <td><strong>${lead.cameraCount || '-'} Cams</strong></td>
+                    <td><span style="color:var(--success); font-weight: 600;">${estCost}</span></td>
                     <td>
                         <div class="flex gap-2">
-                            <a href="https://wa.me/91${lead.whatsapp}?text=Hello%20${encodeURIComponent(lead.name)},%20we%20received%20your%20CCTV%20inquiry%20for%20${lead.cameraCount}%20cameras.%20Let's%20discuss!" target="_blank" class="btn btn-success" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;"><i class="fab fa-whatsapp"></i></a>
+                            <a href="https://wa.me/91${lead.whatsapp}?text=Hello%20${encodeURIComponent(lead.name)}!%20👋%20We%20received%20your%20CCTV%20inquiry%20for%20${lead.cameraCount}%20cameras.%20We%20are%20ready%20to%20schedule%20your%20FREE%20doorstep%20survey%20and%200%25%20No-Cost%20EMI%20setup!" target="_blank" class="btn btn-success" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;"><i class="fab fa-whatsapp"></i></a>
                             <button class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="deleteLead('b2c', '${lead.timestamp}', ${lead.id || 'null'})"><i class="fas fa-trash"></i></button>
                         </div>
                     </td>
