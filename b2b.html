@@ -584,17 +584,59 @@
 
         /* Live Items Counter */
         .items-counter-bar {
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            border-radius: 8px;
-            padding: 10px 14px;
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 10px;
+            padding: 12px 16px;
             margin: 16px 0 20px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .items-counter-bar.complete {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: var(--emerald);
+        }
+
+        .counter-header-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 0.85rem;
-            color: var(--emerald);
-            font-weight: 600;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .counter-progress-track {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .counter-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f59e0b, #10b981);
+            border-radius: 999px;
+            transition: width 0.3s ease;
+        }
+
+        @keyframes shakeAlert {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .shake-highlight {
+            animation: shakeAlert 0.5s ease-in-out;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.6) !important;
+            border-color: #f59e0b !important;
         }
 
         /* Wizard Footer Actions */
@@ -950,7 +992,7 @@
                 <!-- STEP 3: Complete Price Matrix -->
                 <div class="step-pane" id="step3">
                     <h2 class="step-title">What Do You Currently Pay?</h2>
-                    <p class="step-desc">Enter the prices you currently buy at. Fill only the items you regularly buy — leave others blank.</p>
+                    <p class="step-desc">Enter the prices you currently buy at. (<strong>At least 10 products required</strong> to unlock master-distributor rates & free technician gifts).</p>
 
                     <!-- Search Filter -->
                     <div class="matrix-search">
@@ -960,8 +1002,13 @@
 
                     <!-- Items Filled Progress tracker -->
                     <div class="items-counter-bar" id="counterBar">
-                        <span id="priceCountText">Prices entered: 0 products</span>
-                        <span id="rewardBadgeText">Enter 3+ to unlock Free Gift offer 🎁</span>
+                        <div class="counter-header-row">
+                            <span id="priceCountText">Progress: <strong>0 / 10</strong> required products entered</span>
+                            <span id="rewardBadgeText">⚠️ 10 more needed to unlock Step 4 🔒</span>
+                        </div>
+                        <div class="counter-progress-track">
+                            <div class="counter-progress-fill" id="counterProgressFill" style="width: 0%;"></div>
+                        </div>
                     </div>
 
                     <!-- Product Accordion Container -->
@@ -971,8 +1018,8 @@
 
                     <div class="wizard-actions">
                         <button type="button" class="btn-prev" onclick="goToStep(2)">&larr; Back</button>
-                        <button type="button" class="btn-next" onclick="goToStep(4)">
-                            <span>See My Savings &rarr;</span>
+                        <button type="button" class="btn-next" id="step3NextBtn" onclick="goToStep(4)">
+                            <span id="step3BtnText">Enter 10 Prices to Continue &rarr;</span>
                         </button>
                     </div>
                 </div>
@@ -1386,27 +1433,39 @@
             });
         }
 
-        // Live Price Counter & Milestone Unlocks
-        function updatePriceCounter() {
+        function getFilledPricesCount() {
             let count = 0;
             document.querySelectorAll('.price-inp').forEach(inp => {
                 if (inp.value && inp.value.trim() !== '') count++;
             });
+            return count;
+        }
 
+        // Live Price Counter & Milestone Unlocks
+        function updatePriceCounter() {
+            const count = getFilledPricesCount();
             const countText = document.getElementById('priceCountText');
             const rewardText = document.getElementById('rewardBadgeText');
-            if (countText) countText.innerText = `Prices entered: ${count} products`;
+            const fillBar = document.getElementById('counterProgressFill');
+            const counterBar = document.getElementById('counterBar');
+            const btnText = document.getElementById('step3BtnText');
 
-            if (rewardText) {
-                if (count === 0) {
-                    rewardText.innerText = "Enter 3+ to unlock Free Gift offer 🎁";
-                } else if (count < 4) {
-                    rewardText.innerText = "🥉 Rate Card Unlocked! Enter 4+ for Free Delivery";
-                } else if (count < 8) {
-                    rewardText.innerText = "🥈 Free Delivery Unlocked! Enter 8+ for Free Tech Bag 🎒";
-                } else {
-                    rewardText.innerText = "🥇 Gold Tier: Free Heavy Duty Bag & Tester Unlocked! 🎉";
-                }
+            const pct = Math.min(100, Math.round((count / 10) * 100));
+            if (fillBar) fillBar.style.width = pct + '%';
+
+            if (countText) {
+                countText.innerHTML = `Progress: <strong>${count} / 10</strong> required products entered`;
+            }
+
+            if (count < 10) {
+                const remaining = 10 - count;
+                if (rewardText) rewardText.innerText = `⚠️ ${remaining} more needed to unlock Step 4 🔒`;
+                if (counterBar) counterBar.classList.remove('complete');
+                if (btnText) btnText.innerHTML = `Enter ${remaining} More Prices &rarr;`;
+            } else {
+                if (rewardText) rewardText.innerText = `🎉 10/10 Reached! Free Tech Bag & Delivery Unlocked!`;
+                if (counterBar) counterBar.classList.add('complete');
+                if (btnText) btnText.innerHTML = `See My Savings & Unlock Rate Card &rarr;`;
             }
         }
 
@@ -1420,6 +1479,23 @@
             if (step === 3 && selectedBrands.length === 0) {
                 alert("Please select at least one brand you work with.");
                 return;
+            }
+
+            // Strictly require at least 10 entries before proceeding to step 4
+            if (step === 4) {
+                const filledCount = getFilledPricesCount();
+                if (filledCount < 10) {
+                    const needed = 10 - filledCount;
+                    alert(`⚠️ Minimum 10 product entries required!\n\nYou have entered ${filledCount} / 10 products (${needed} more needed).\n\nPlease fill prices for ${needed} more items across any categories (Cameras, DVR, NVR, SMPS, HDD, Cables, Routers) to unlock your wholesale rate card.`);
+                    
+                    const counterBar = document.getElementById('counterBar');
+                    if (counterBar) {
+                        counterBar.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        counterBar.classList.add('shake-highlight');
+                        setTimeout(() => counterBar.classList.remove('shake-highlight'), 1200);
+                    }
+                    return;
+                }
             }
 
             // Update Progress Nav
@@ -1446,7 +1522,7 @@
                 milestoneText.innerHTML = "🎯 <strong>Step 2 of 4:</strong> Select the brands you buy to check direct master-distributor margins.";
                 milestoneBadge.innerText = "BRAND MATCH";
             } else if (step === 3) {
-                milestoneText.innerHTML = "💡 <strong>Step 3 of 4:</strong> Enter what you pay. The more you enter, the deeper wholesale discount we can offer!";
+                milestoneText.innerHTML = "💡 <strong>Step 3 of 4:</strong> Enter what you pay for at least 10 products to unlock wholesale rates & free tech tools!";
                 milestoneBadge.innerText = "PRICE MATRIX";
             } else if (step === 4) {
                 milestoneText.innerHTML = "🎁 <strong>Almost Done!</strong> Where should we send your wholesale rate card and free gift voucher?";
