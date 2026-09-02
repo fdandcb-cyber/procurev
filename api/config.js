@@ -1,11 +1,10 @@
 export default function handler(req, res) {
-    // Read environment variables submitted in Vercel Project Settings
     const supabaseUrl = 
         process.env.SUPABASE_URL ||
         process.env.VITE_SUPABASE_URL ||
         process.env.NEXT_PUBLIC_SUPABASE_URL ||
         process.env.REACT_APP_SUPABASE_URL ||
-        'https://addlxslnsxlrgleennto.supabase.co';
+        'https://lxfkygzdywysdlaxmpdo.supabase.co';
 
     const supabaseKey = 
         process.env.SUPABASE_ANON_KEY ||
@@ -13,7 +12,7 @@ export default function handler(req, res) {
         process.env.VITE_SUPABASE_ANON_KEY ||
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
         process.env.REACT_APP_SUPABASE_ANON_KEY ||
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkZGx4c2xuc3hscmdsZWVubnRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MTQ5NjIsImV4cCI6MjA5ODQ5MDk2Mn0.AM-KEAI-hxzNNi5ML-Lki-wCsHHje8RqGubZ0h8tjPE';
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx4Zmt5Z3pkeXd5c2RsYXhtcGRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyODYzMzIsImV4cCI6MjEwMzg2MjMzMn0.YWlHtsBCB6AWTu0xfgI1zU9InwjcjG-1R488lYxrSq0';
 
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Cache-Control', 'no-store, max-age=0');
