@@ -902,15 +902,33 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script>
-        const DEFAULT_SUPABASE_URL = 'https://addlxslnsxlrgleennto.supabase.co';
-        const DEFAULT_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkZGx4c2xuc3hscmdsZWVubnRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MTQ5NjIsImV4cCI6MjA5ODQ5MDk2Mn0.AM-KEAI-hxzNNi5ML-Lki-wCsHHje8RqGubZ0h8tjPE';
+        let activeSupabaseUrl = 'https://addlxslnsxlrgleennto.supabase.co';
+        let activeSupabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkZGx4c2xuc3hscmdsZWVubnRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MTQ5NjIsImV4cCI6MjA5ODQ5MDk2Mn0.AM-KEAI-hxzNNi5ML-Lki-wCsHHje8RqGubZ0h8tjPE';
         
         let _supabaseB2C = null;
+
+        async function fetchVercelConfig() {
+            try {
+                const res = await fetch('/api/config');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.supabaseUrl && data.supabaseKey) {
+                        activeSupabaseUrl = data.supabaseUrl;
+                        activeSupabaseKey = data.supabaseKey;
+                        if (window.supabase && typeof window.supabase.createClient === 'function') {
+                            _supabaseB2C = window.supabase.createClient(activeSupabaseUrl, activeSupabaseKey);
+                        }
+                    }
+                }
+            } catch(e) {}
+        }
+        fetchVercelConfig();
+
         function getSupabase() {
             if (!_supabaseB2C && typeof window !== 'undefined') {
                 try {
-                    const url = localStorage.getItem('custom_supabase_url') || DEFAULT_SUPABASE_URL;
-                    const key = localStorage.getItem('custom_supabase_key') || DEFAULT_SUPABASE_KEY;
+                    const url = localStorage.getItem('custom_supabase_url') || activeSupabaseUrl;
+                    const key = localStorage.getItem('custom_supabase_key') || activeSupabaseKey;
                     if (window.supabase && typeof window.supabase.createClient === 'function') {
                         _supabaseB2C = window.supabase.createClient(url, key);
                     }

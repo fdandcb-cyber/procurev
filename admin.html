@@ -514,15 +514,34 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script>
-        const DEFAULT_SUPABASE_URL = 'https://addlxslnsxlrgleennto.supabase.co';
-        const DEFAULT_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkZGx4c2xuc3hscmdsZWVubnRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MTQ5NjIsImV4cCI6MjA5ODQ5MDk2Mn0.AM-KEAI-hxzNNi5ML-Lki-wCsHHje8RqGubZ0h8tjPE';
+        let activeSupabaseUrl = 'https://addlxslnsxlrgleennto.supabase.co';
+        let activeSupabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkZGx4c2xuc3hscmdsZWVubnRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MTQ5NjIsImV4cCI6MjA5ODQ5MDk2Mn0.AM-KEAI-hxzNNi5ML-Lki-wCsHHje8RqGubZ0h8tjPE';
         
         let _supabaseClient = null;
+
+        async function fetchVercelConfig() {
+            try {
+                const res = await fetch('/api/config');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.supabaseUrl && data.supabaseKey) {
+                        activeSupabaseUrl = data.supabaseUrl;
+                        activeSupabaseKey = data.supabaseKey;
+                        if (window.supabase && typeof window.supabase.createClient === 'function') {
+                            _supabaseClient = window.supabase.createClient(activeSupabaseUrl, activeSupabaseKey);
+                        }
+                    }
+                }
+            } catch(e) {
+                console.warn('Vercel API config note:', e);
+            }
+        }
+
         function getSupabase() {
             if (!_supabaseClient && typeof window !== 'undefined') {
                 try {
-                    const url = localStorage.getItem('custom_supabase_url') || DEFAULT_SUPABASE_URL;
-                    const key = localStorage.getItem('custom_supabase_key') || DEFAULT_SUPABASE_KEY;
+                    const url = localStorage.getItem('custom_supabase_url') || activeSupabaseUrl;
+                    const key = localStorage.getItem('custom_supabase_key') || activeSupabaseKey;
                     if (window.supabase && typeof window.supabase.createClient === 'function') {
                         _supabaseClient = window.supabase.createClient(url, key);
                     }
@@ -534,8 +553,8 @@
         }
 
         function openDbSettingsModal() {
-            const url = localStorage.getItem('custom_supabase_url') || DEFAULT_SUPABASE_URL;
-            const key = localStorage.getItem('custom_supabase_key') || DEFAULT_SUPABASE_KEY;
+            const url = localStorage.getItem('custom_supabase_url') || activeSupabaseUrl;
+            const key = localStorage.getItem('custom_supabase_key') || activeSupabaseKey;
             document.getElementById('cfg-supabase-url').value = url;
             document.getElementById('cfg-supabase-key').value = key;
             document.getElementById('cfg-test-status').style.display = 'none';
@@ -612,7 +631,8 @@
         }
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            await fetchVercelConfig();
             try {
                 if(sessionStorage.getItem('admin_logged_in') === 'true') {
                     showDashboard();
@@ -626,7 +646,7 @@
             }, 1000);
         });
 
-        function showDashboard() {
+        async function showDashboard() {
             const loginEl = document.getElementById('login-screen');
             const dashEl = document.getElementById('dashboard');
             if (loginEl) loginEl.style.display = 'none';
@@ -638,6 +658,7 @@
             } catch(e) {
                 console.error('Initial render note:', e);
             }
+            await fetchVercelConfig();
             loadData().catch(e => console.error('loadData error:', e));
         }
 
